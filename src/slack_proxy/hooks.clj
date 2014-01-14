@@ -48,9 +48,12 @@
 
         action            (cond new-discussion? "opened"
                                 resolved?       "resolved"
-                                internal?       "updated (internal)"
+                                (and internal? (not system-message?))
+                                                "updated (internal)"
                                 :else           "updated")
-        extras            (if system-message? (str ": " body) "")]
+        extras            (if (and system-message? (not resolved?))
+                            (str ": " body)
+                            "")]
 
     (format "[tender] #%d \"<%s|%s>\" was %s by %s%s"
             number href title action message-author extras)))
