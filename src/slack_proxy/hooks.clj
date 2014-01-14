@@ -56,8 +56,9 @@
             number href title action message-author extras)))
 
 (defn tender [request]
-  slack/post {:username "tender"
-              :text (tender-format request)})
+  (prn request)
+  (slack/post {:username "tender"
+              :text (tender-format request)}))
 
 (defn travis [request]
   (prn request)
