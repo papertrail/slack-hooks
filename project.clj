@@ -1,6 +1,6 @@
 (defproject slack-proxy "0.1.0-SNAPSHOT"
   :description "Relay webhooks to Slack webhooks"
-  :url "https://github.com/lmarburger/slack-proxy"
+  :url "https://github.com/papertrail/slack-hooks"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
