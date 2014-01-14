@@ -8,12 +8,12 @@
         base-url "https://site.tenderapp.com/"]
 
     (testing "Returns internal URL"
-      (is (= (tender/convert-to-internal-url discussion-url base-url)
-             "https://site.tenderapp.com/discussions/12345")))
+      (is (= "https://site.tenderapp.com/discussions/12345"
+             (tender/convert-to-internal-url discussion-url base-url))))
 
     (testing "Returns unmodified discussion URL without base URL"
-      (is (= (tender/convert-to-internal-url discussion-url nil)
-             discussion-url)))))
+      (is (= discussion-url
+             (tender/convert-to-internal-url discussion-url nil))))))
 
 (deftest tender-test
   (testing "Formatting a Tender webhook"
