@@ -2,13 +2,24 @@
   (:use ring.util.response
         [clojure.string :only [lower-case]])
   (:require [clojure.data.json :as json]
-            [slack-hooks.slack :as slack]))
+            [slack-hooks.slack :as slack]
+            [clojurewerkz.urly.core :as urly]))
 
+(def tender-base-url
+  (System/getenv "TENDER_BASE_URL"))
 
 (defn tender-internal-url [href]
-  (clojure.string/replace href
-                          "http://help.papertrailapp.com/"
-                          "https://papertrailapp.tenderapp.com/"))
+  (if tender-base-url
+    (let [base-url  (urly/url-like tender-base-url)
+          new-proto (urly/protocol-of base-url)
+          new-host  (urly/host-of base-url)]
+      (-> href
+          urly/url-like
+          (.mutateProtocol new-proto)
+          (.mutateHost new-host)
+          str))
+    href))
+
 
 (defn tender-format [request]
   (let [data              (request :body)
