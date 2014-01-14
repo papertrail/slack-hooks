@@ -1,0 +1,4 @@
+.lein-failures
+slack_proxy.iml
+target
+.nrepl-port
