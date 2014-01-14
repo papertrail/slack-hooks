@@ -12,4 +12,5 @@
   :uberjar-name "slack-hooks-standalone.jar"
   :plugins [[lein-ring "0.7.1"]]
   :ring {:handler slack-hooks.routes/app}
+  :main slack-hooks.core
   :min-lein-version "2.0.0")
