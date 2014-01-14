@@ -1,4 +1,4 @@
-(defproject slack-proxy "0.1.0-SNAPSHOT"
+(defproject slack-hooks "1.0.0-SNAPSHOT"
   :description "Relay webhooks to Slack webhooks"
   :url "https://github.com/papertrail/slack-hooks"
   :license {:name "Eclipse Public License"
