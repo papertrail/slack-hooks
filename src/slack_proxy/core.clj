@@ -11,19 +11,18 @@
                          (params "author_name"))
         title        (get-in params ["discussion" "title"])
         href         (params "html_href")
-        https-href   href
+        https-href   (clojure.string/replace
+                       href
+                       "http://help.papertrailapp.com/"
+                       "https://papertrailapp.tenderapp.com/")
         linked-title (format "<%s|%s>" https-href, title)
-        public?      (not (params "internal"))]
-    (slack/notify {"fallback" linked-title
-                   ; "channel" "#test"
-                   "fields" [{"title" "Title"
-                              "value" linked-title}
-                             {"title" "Name"
-                              "value" username
-                              "short" true}
-                             {"title" "Public?"
-                              "value" (if public? "Yes" "No")
-                              "short" true}]}))
+        public?      (not (params "internal"))
+        message      (format "<%s|%s> (%s; %s)"
+                             https-href
+                             title
+                             username
+                             (if public? "Public" "Private"))]
+    (slack/notify {"text" message}))
   (response "Done\n"))
 
 (def app
