@@ -1,5 +1,5 @@
-(ns slack-proxy.core
-  (:require slack-proxy.routes
+(ns slack-hooks.core
+  (:require slack-hooks.routes
             [ring.adapter.jetty :refer [run-jetty]]))
 
 (defn -main
@@ -8,4 +8,4 @@
      (-main port)))
   ([port]
    (let [port (Integer. port)]
-     (run-jetty #'slack-proxy.routes/app {:port port}))))
+     (run-jetty #'slack-hooks.routes/app {:port port}))))

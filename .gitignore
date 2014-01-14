@@ -1,5 +1,6 @@
 .lein-failures
-slack_proxy.iml
+slack_hooks.iml
 target
 .nrepl-port
 .idea
+*.iml

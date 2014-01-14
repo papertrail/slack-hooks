@@ -8,7 +8,7 @@
                  [org.clojure/data.json "0.2.4"]
                  [ring/ring-json "0.2.0"]
                  [clj-http "0.7.8"]]
-  :uberjar-name "slack-proxy-standalone.jar"
+  :uberjar-name "slack-hooks-standalone.jar"
   :plugins [[lein-ring "0.7.1"]]
-  :ring {:handler slack-proxy.routes/app}
+  :ring {:handler slack-hooks.routes/app}
   :min-lein-version "2.0.0")
