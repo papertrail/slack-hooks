@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [ring/ring-jetty-adapter "1.1.6"]
                  [org.clojure/data.json "0.2.4"]
+                 [ring/ring-json "0.2.0"]
                  [clj-http "0.7.8"]]
   :uberjar-name "slack-proxy-standalone.jar"
   :plugins [[lein-ring "0.7.1"]]

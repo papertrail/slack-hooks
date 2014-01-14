@@ -28,6 +28,37 @@
       build-number commit compare-url commiter-name
       repository branch status build-url)))
 
+(defn tender-internal-url [href]
+  (clojure.string/replace href
+    "http://help.papertrailapp.com/"
+    "https://papertrailapp.tenderapp.com/"))
+
+(defn tender-format [request]
+  (let [data              (request :body)
+        new-discussion?   (= 1 (data :number))
+        number            (-> data :discussion :number)
+        discussion-author (-> data :discussion :author_name)
+        message-author    (data :author_name)
+        title             (get-in data [:discussion :title])
+        href              (tender-internal-url (data :html_href))
+        internal?         (data :internal)
+        resolved?         (data :resolution)
+        system-message?   (data :system_message)
+        body              (data :body)
+
+        action            (cond new-discussion? "opened"
+                                resolved?       "resolved"
+                                internal?       "updated (internal)"
+                                :else           "updated")
+        extras            (if system-message? (str ": " body) "")]
+
+    (format "[tender] #%d \"<%s|%s>\" was %s by %s%s"
+            number href title action message-author extras)))
+
+(defn tender [request]
+  slack/post {:username "tender"
+              :text (tender-format request)})
+
 (defn travis [request]
   (prn request)
   (slack/post {:username "travis-ci"
