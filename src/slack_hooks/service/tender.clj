@@ -24,36 +24,48 @@
        (str discussion-url))
      discussion-url)))
 
+(defn message-from-request-body
+  "Accepts a map of the body of a Tender webhook and returns a map describing
+  the message."
+  [request-body]
+  (let [discussion (request-body :discussion)]
+    {:href (request-body :html_href)
+     :number (discussion :number)
+     :title (discussion :title)
+     :author (request-body :author_name)
+     :last-comment-id (discussion :last_comment_id)
+     :body (request-body :body)
+     :new-discussion? (= 1 (request-body :number))
+     :internal? (request-body :internal)
+     :resolved? (= true (request-body :resolution))
+     :system-message? (request-body :system_message)}))
+
 (defn tender-format [request]
-  (let [data              (request :body)
-        new-discussion?   (= 1 (data :number))
-        number            (-> data :discussion :number)
-        discussion-author (-> data :discussion :author_name)
-        message-author    (data :author_name)
-        title             (get-in data [:discussion :title])
-        last-comment-id   (-> data :discussion :last_comment_id)
-        href              (str (convert-to-internal-url (data :html_href))
-                               "#comment_"
-                               last-comment-id)
-        internal?         (data :internal)
-        resolved?         (data :resolution)
-        system-message?   (data :system_message)
-        body              (data :body)
-
-        action            (cond new-discussion? "opened"
-                                resolved?       "resolved"
-                                (and internal? (not system-message?))
-                                "updated (internal)"
-                                :else           "updated")
-        extras            (if (and system-message? (not resolved?))
-                            (str ": " body)
-                            "")]
-
+  (let [message (message-from-request-body (:body request))
+        href (str (convert-to-internal-url (:href message))
+                  "#comment_"
+                  (:last-comment-id message))
+        action (cond (:new-discussion? message) "opened"
+                     (:resolved? message) "resolved"
+                     (and (:internal? message)
+                          (not (:system-message? message)))
+                       "updated (internal)"
+                     :else "updated")
+        extras (if (and (:system-message? message)
+                        (not (:resolved? message)))
+                 (str ": " (:body message))
+                 "")]
     (format "[tender] #%d \"<%s|%s>\" was %s by %s%s"
-            number href title action message-author extras)))
+            (:number message)
+            href
+            (:title message)
+            action
+            (:author message)
+            extras)))
 
-(defn tender [request]
-  (prn request)
-  (slack/notify {:username "tender"
-                 :text (tender-format request)}))
-
+(defn tender
+  [request]
+  (let [options {:username "tender"
+                :text (tender-format request)}]
+    (prn (tender-format request))))
+    ; (slack/notify options)))
