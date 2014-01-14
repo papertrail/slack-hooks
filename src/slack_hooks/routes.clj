@@ -1,6 +1,5 @@
 (ns slack-hooks.routes
-  (:use slack-hooks.hooks
-        ring.util.response
+  (:use ring.util.response
         [ring.middleware.params :only [wrap-params]]
         [ring.middleware.keyword-params :only [wrap-keyword-params]]
         [ring.middleware.json :only [wrap-json-body]])
