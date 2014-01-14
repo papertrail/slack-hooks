@@ -1,0 +1,63 @@
+{
+  "id": 16906218,
+  "repository": {
+    "id": 1759261,
+    "name": "north-american-bear",
+    "owner_name": "eric",
+    "url": "https:\/\/github.com\/eric\/north-american-bear"
+  },
+  "number": "1",
+  "config": {
+    "notifications": {
+      "webhooks": "http:\/\/requestb.in\/12jmg951"
+    },
+    ".result": "configured",
+    "language": "ruby"
+  },
+  "status": 1,
+  "result": 1,
+  "status_message": "Failed",
+  "result_message": "Failed",
+  "started_at": "2014-01-14T01:59:40Z",
+  "finished_at": "2014-01-14T01:59:55Z",
+  "duration": 15,
+  "build_url": "https:\/\/travis-ci.org\/eric\/north-american-bear\/builds\/16906218",
+  "commit": "1744327fb856dc9ce1ed23c82486d4a612456ee6",
+  "branch": "master",
+  "message": "Create .travis.yml",
+  "compare_url": "https:\/\/github.com\/eric\/north-american-bear\/compare\/48178e556ef8...1744327fb856",
+  "committed_at": "2014-01-14T01:56:32Z",
+  "author_name": "Eric Lindvall",
+  "author_email": "eric@5stops.com",
+  "committer_name": "Eric Lindvall",
+  "committer_email": "eric@5stops.com",
+  "matrix": [
+    {
+      "id": 16906219,
+      "repository_id": 1759261,
+      "parent_id": 16906218,
+      "number": "1.1",
+      "state": "finished",
+      "config": {
+        "notifications": {
+          "webhooks": "http:\/\/requestb.in\/12jmg951"
+        },
+        ".result": "configured",
+        "language": "ruby"
+      },
+      "status": null,
+      "result": null,
+      "commit": "1744327fb856dc9ce1ed23c82486d4a612456ee6",
+      "branch": "master",
+      "message": "Create .travis.yml",
+      "compare_url": "https:\/\/github.com\/eric\/north-american-bear\/compare\/48178e556ef8...1744327fb856",
+      "committed_at": "2014-01-14T01:56:32Z",
+      "author_name": "Eric Lindvall",
+      "author_email": "eric@5stops.com",
+      "committer_name": "Eric Lindvall",
+      "committer_email": "eric@5stops.com",
+      "finished_at": "2014-01-14T01:59:55Z"
+    }
+  ],
+  "type": "push"
+}

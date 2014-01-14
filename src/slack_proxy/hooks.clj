@@ -20,7 +20,7 @@
         commiter-name (username-from-email (data :committer_email))
         repository    (-> data :repository :name)
         branch        (data :branch)
-        status        (lower-case (str (data :status_message)))
+        status        (lower-case (str (data :result_message)))
         started-at    (data :started_at)
         finished-at   (data :finished_at)]
     (format
