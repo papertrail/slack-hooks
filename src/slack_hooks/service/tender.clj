@@ -5,21 +5,24 @@
             [slack-hooks.slack :as slack]
             [clojurewerkz.urly.core :as urly]))
 
-(def tender-base-url
-  (System/getenv "TENDER_BASE_URL"))
+(defn convert-to-internal-url
+  "Converts a public Tender discussion URL into an internal URL suitable for
+  support staff."
+  ([discussion-url]
+   (let [base-url (System/getenv "TENDER_BASE_URL")]
+     (convert-to-internal-url discussion-url base-url)))
 
-(defn tender-internal-url [href]
-  (if tender-base-url
-    (let [base-url  (urly/url-like tender-base-url)
-          new-proto (urly/protocol-of base-url)
-          new-host  (urly/host-of base-url)]
-      (-> href
-          urly/url-like
-          (.mutateProtocol new-proto)
-          (.mutateHost new-host)
-          str))
-    href))
-
+  ([discussion-url base-url]
+   (if base-url
+     (let [base-url (urly/url-like base-url)
+           protocol (urly/protocol-of base-url)
+           host (urly/host-of base-url)
+           discussion-url (-> discussion-url
+                              urly/url-like
+                              (.mutateProtocol protocol)
+                              (.mutateHost host))]
+       (str discussion-url))
+     discussion-url)))
 
 (defn tender-format [request]
   (let [data              (request :body)
@@ -29,7 +32,9 @@
         message-author    (data :author_name)
         title             (get-in data [:discussion :title])
         last-comment-id   (-> data :discussion :last_comment_id)
-        href              (str (tender-internal-url (data :html_href)) "#comment_" last-comment-id)
+        href              (str (convert-to-internal-url (data :html_href))
+                               "#comment_"
+                               last-comment-id)
         internal?         (data :internal)
         resolved?         (data :resolution)
         system-message?   (data :system_message)
