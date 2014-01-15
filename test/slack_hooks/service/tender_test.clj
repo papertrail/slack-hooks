@@ -3,17 +3,50 @@
             [slack-hooks.service.tender :as tender]
             [clojure.data.json :as json]))
 
-(deftest convert-to-internal-url-test
-  (let [discussion-url "http://site.com/discussions/12345"
+(deftest swap-base-url-test
+  (let [url "http://site.com/discussions/42"
         base-url "https://site.tenderapp.com/"]
 
-    (testing "Returns internal URL"
-      (is (= "https://site.tenderapp.com/discussions/12345"
-             (tender/convert-to-internal-url discussion-url base-url))))
+    (testing "Swaps hostname and protocol"
+      (is (= "https://site.tenderapp.com/discussions/42"
+             (tender/swap-base-url url base-url))))
 
-    (testing "Returns unmodified discussion URL without base URL"
-      (is (= discussion-url
-             (tender/convert-to-internal-url discussion-url nil))))))
+    (testing "Returns original url without base url"
+      (is (= url
+             (tender/swap-base-url url nil))))))
+
+(deftest internal-message-link-test
+  (let [message {:href "http://site.com/discussions/42"
+                 :last-comment-id 24}
+        base-url "https://site.tenderapp.com/"]
+    (testing "Returns internal link for a message"
+      (is (= "https://site.tenderapp.com/discussions/42#comment_24"
+             (tender/internal-message-link message base-url))))))
+
+(deftest message-action
+  (let [message {:new-discussion? false
+                 :resolved?       false
+                 :internal?       false
+                 :system-message? false}]
+    (testing "Public update"
+      (is (= "updated" (tender/message-action message))))
+
+    (testing "Opened"
+      (let [message (assoc message :new-discussion? true)]
+        (is (= "opened" (tender/message-action message)))))
+
+    (testing "Resolved"
+      (let [message (assoc message :resolved? true)]
+        (is (= "resolved" (tender/message-action message)))))
+
+    (testing "Internal update"
+      (let [message (assoc message :internal? true)]
+        (is (= "updated (internal)" (tender/message-action message)))))
+
+    (testing "System message"
+      (let [message (assoc message :internal? true
+                                   :system-message? true)]
+        (is (= "updated" (tender/message-action message)))))))
 
 (deftest message-from-request-body-test
   (let [request-body {:html_href "http://tender"
@@ -66,4 +99,4 @@
     (let [text (slurp "test/resources/tender.json")
           body (json/read-str text :key-fn keyword)]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: Title>\" was updated by user"
-             (tender/tender-format {:body body}))))))
+             (tender/formatted-message {:body body}))))))

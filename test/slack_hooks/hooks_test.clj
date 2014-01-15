@@ -16,4 +16,4 @@
     (let [text (slurp "test/resources/tender.json")
           body (json/read-str text :key-fn keyword)]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: Title>\" was updated by user"
-             (tender/tender-format {:body body}))))))
+             (tender/formatted-message {:body body}))))))
