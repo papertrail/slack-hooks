@@ -84,5 +84,6 @@
   [request]
   (let [options {:username tender-username
                  :text (formatted-message request)}]
+    (prn request)
     (prn options)
     (slack/notify options)))
