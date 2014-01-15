@@ -94,9 +94,9 @@
             data (tender/message-from-request request)]
         (is (= true (data :system-message?)))))))
 
-(deftest tender-test
+(deftest formatted-message-test
   (testing "Formatting a Tender webhook"
     (let [text (slurp "test/resources/tender.json")
           body (json/read-str text :key-fn keyword)]
-      (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: Title>\" was updated by user"
+      (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: -&gt; Title>\" was updated by user"
              (tender/formatted-message {:body body}))))))

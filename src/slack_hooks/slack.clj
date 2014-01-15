@@ -5,6 +5,10 @@
 (def slack-url
   (System/getenv "SLACK_URL"))
 
+(defn escape
+  [message]
+  (clojure.string/escape message {\< "&lt;" \> "&gt;"}))
+
 (defn notify [data]
   (client/post slack-url
     {:insecure? true  ;; Temporary until we're able to figure out how to
