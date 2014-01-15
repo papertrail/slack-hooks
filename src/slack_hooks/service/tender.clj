@@ -73,7 +73,7 @@
     (format "[tender] #%d \"<%s|%s>\" was %s by %s%s"
             (:number message)
             (internal-message-link message)
-            (:title message)
+            (slack/escape-message (:title message))
             (message-action message)
             (:author message)
             extras)))
