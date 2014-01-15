@@ -3,7 +3,6 @@
             [slack-hooks.slack :as slack]))
 
 (deftest escape-message-test
-  (let [data {:text "This is <a> test."}]
-    (testing "Escapes HTML characters"
-      (is (= {:text "This is &lt;a&gt; test."}
-             (slack/escape-message data))))))
+  (testing "Escapes HTML characters"
+    (is (= "This is &lt;a&gt; test."
+           (slack/escape-message "This is <a> test.")))))
