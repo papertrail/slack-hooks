@@ -5,7 +5,7 @@
 (def slack-url
   (System/getenv "SLACK_URL"))
 
-(defn escape-message
+(defn escape
   [message]
   (clojure.string/escape message {\< "&lt;" \> "&gt;"}))
 
