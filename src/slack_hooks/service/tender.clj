@@ -5,6 +5,15 @@
             [slack-hooks.slack :as slack]
             [clojurewerkz.urly.core :as urly]))
 
+(def tender-base-url
+  (System/getenv "TENDER_BASE_URL"))
+
+(def tender-username
+  (get (System/getenv) "TENDER_USERNAME" "tender"))
+
+(def tender-avatar
+  (System/getenv "TENDER_AVATAR"))
+
 (defn swap-base-url
   "Takes a URL and base URL and returns a new URL that is the original with
   the protocl and host of the base."
@@ -22,12 +31,10 @@
 
 (defn internal-message-link
   "Returns an internal URL to the message suitable for support staff."
-  ([message]
-   (internal-message-link message (System/getenv "TENDER_BASE_URL")))
-  ([message base-url]
-   (str (swap-base-url (:href message) base-url)
-        "#comment_"
-        (:last-comment-id message))))
+  [message]
+  (str (swap-base-url (:href message) tender-base-url)
+       "#comment_"
+       (:last-comment-id message)))
 
 (defn message-action
   "Returns an action that describes the message."
@@ -38,24 +45,27 @@
              (not (:system-message? message))) "updated (internal)"
         :else "updated"))
 
-(defn message-from-request-body
+(defn message-from-request
   "Accepts a map of the body of a Tender webhook and returns a map describing
   the message."
-  [request-body]
-  (let [discussion (request-body :discussion)]
-    {:href (request-body :html_href)
-     :number (discussion :number)
-     :title (discussion :title)
-     :author (request-body :author_name)
+  [request]
+  (let [payload (:body request)
+        discussion (payload :discussion)]
+    {:href            (payload :html_href)
+     :number          (discussion :number)
+     :title           (discussion :title)
+     :author          (payload :author_name)
      :last-comment-id (discussion :last_comment_id)
-     :body (request-body :body)
-     :new-discussion? (= 1 (request-body :number))
-     :internal? (request-body :internal)
-     :resolved? (= true (request-body :resolution))
-     :system-message? (request-body :system_message)}))
+     :body            (payload :body)
+     :new-discussion? (= 1 (payload :number))
+     :internal?       (payload :internal)
+     :resolved?       (= true (payload :resolution))
+     :system-message? (payload :system_message)}))
 
-(defn formatted-message [request]
-  (let [message (message-from-request-body (:body request))
+(defn formatted-message
+  "Returns a string describing the given message"
+  [request]
+  (let [message (message-from-request request)
         extras (if (and (:system-message? message)
                         (not (:resolved? message)))
                  (str ": " (:body message))
@@ -69,12 +79,10 @@
             extras)))
 
 (defn tender
-  []
-  (let [base-url (System/getenv "TENDER_BASE_URL")
-        username (get (System/getenv) "TENDER_USERNAME" "tender")
-        avatar-url (System/getenv "TENDER_AVATAR_URL")]
-    (fn [request]
-      (let [options {:username username
-                     :avatar-url avatar-url
-                     :text (formatted-message request)}]
-        (slack/notify options)))))
+  "Accepts an HTTP request from a Tender webhook and reports the details to a
+  Slack webhook."
+  [request]
+  (let [options {:username tender-username
+                 :text (formatted-message request)}]
+    (prn options)
+    (slack/notify options)))

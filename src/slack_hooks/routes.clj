@@ -14,7 +14,7 @@
 (def routes-by-uri
   {"/github" service.github/github
    "/travis" service.travis/travis
-   "/tender" (service.tender/tender)})
+   "/tender" service.tender/tender})
 
 (defn handler [request]
   ((routes-by-uri (:uri request) four-oh-four) request))

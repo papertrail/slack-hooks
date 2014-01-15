@@ -7,21 +7,21 @@
   (let [url "http://site.com/discussions/42"
         base-url "https://site.tenderapp.com/"]
 
-    (testing "Swaps hostname and protocol"
-      (is (= "https://site.tenderapp.com/discussions/42"
-             (tender/swap-base-url url base-url))))
+      (testing "Swaps hostname and protocol"
+        (is (= "https://site.tenderapp.com/discussions/42"
+               (tender/swap-base-url url base-url))))
 
-    (testing "Returns original url without base url"
-      (is (= url
-             (tender/swap-base-url url nil))))))
+      (testing "Returns original url without base url"
+        (is (= url
+               (tender/swap-base-url url nil))))))
 
 (deftest internal-message-link-test
-  (let [message {:href "http://site.com/discussions/42"
-                 :last-comment-id 24}
-        base-url "https://site.tenderapp.com/"]
-    (testing "Returns internal link for a message"
-      (is (= "https://site.tenderapp.com/discussions/42#comment_24"
-             (tender/internal-message-link message base-url))))))
+  (with-redefs [tender/tender-base-url "https://site.tenderapp.com/"]
+    (let [message {:href "http://site.com/discussions/42"
+                   :last-comment-id 24}]
+      (testing "Returns internal link for a message"
+        (is (= "https://site.tenderapp.com/discussions/42#comment_24"
+               (tender/internal-message-link message)))))))
 
 (deftest message-action
   (let [message {:new-discussion? false
@@ -48,20 +48,20 @@
                                    :system-message? true)]
         (is (= "updated" (tender/message-action message)))))))
 
-(deftest message-from-request-body-test
-  (let [request-body {:html_href "http://tender"
-                      :author_name "Arthur Dent"
-                      :body "Please send help."
-                      :number 1
-                      :internal true
-                      :resolution nil
-                      :system_message false
-                      :discussion {:number 42
-                                   :title "Halp!"
-                                   :last_comment_id 24}}]
+(deftest message-from-request-test
+  (let [request {:body {:html_href "http://tender"
+                        :author_name "Arthur Dent"
+                        :body "Please send help."
+                        :number 1
+                        :internal true
+                        :resolution nil
+                        :system_message false
+                        :discussion {:number 42
+                                     :title "Halp!"
+                                     :last_comment_id 24}}}]
 
     (testing  "Returns a map from a given Tender webhook"
-      (let [data (tender/message-from-request-body request-body)]
+      (let [data (tender/message-from-request request)]
         (are [value property] (= value (data property))
              "http://tender" :href
              42 :number
@@ -75,23 +75,23 @@
              false :system-message?)))
 
     (testing "Subsequent messages in a discussion"
-      (let [request-body (assoc request-body :number 12)
-            data (tender/message-from-request-body request-body)]
+      (let [request (assoc-in request [:body :number] 12)
+            data (tender/message-from-request request)]
         (is (= false (data :new-discussion?)))))
 
     (testing "External messages"
-      (let [request-body (assoc request-body :internal false)
-            data (tender/message-from-request-body request-body)]
+      (let [request (assoc-in request [:body :internal] false)
+            data (tender/message-from-request request)]
         (is (= false (data :internal?)))))
 
     (testing "Resolved discussion"
-      (let [request-body (assoc request-body :resolution true)
-            data (tender/message-from-request-body request-body)]
+      (let [request (assoc-in request [:body :resolution] true)
+            data (tender/message-from-request request)]
         (is (= true (data :resolved?)))))
 
     (testing "System messages"
-      (let [request-body (assoc request-body :system_message true)
-            data (tender/message-from-request-body request-body)]
+      (let [request (assoc-in request [:body :system_message] true)
+            data (tender/message-from-request request)]
         (is (= true (data :system-message?)))))))
 
 (deftest tender-test
