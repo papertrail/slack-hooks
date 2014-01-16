@@ -39,9 +39,9 @@
         finished-at    (data :finished_at)
         duration       (duration started-at finished-at)]
     (format
-      "[build] #%s (<%s|%s>) by %s of <%s/%s|%s> %s in %ds — <%s>"
-      build-number short-commit compare-url commiter-name
-      repository branch repository-url status duration
+      "[build] #%s (<%s|%s>) by %s of <%s|%s/%s> %s in %ds — <%s>"
+      build-number compare-url short-commit commiter-name
+      repository-url repository branch status duration
       build-url)))
 
 
