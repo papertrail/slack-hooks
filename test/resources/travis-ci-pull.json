@@ -1,0 +1,73 @@
+{
+  "id": 17048460,
+  "repository": {
+    "id": 1759261,
+    "name": "north-american-bear",
+    "owner_name": "eric",
+    "url": "https:\/\/github.com\/eric\/north-american-bear"
+  },
+  "number": "10",
+  "config": {
+    "notifications": {
+      "webhooks": [
+        {
+          "secure": "Xkj77yg3WdQVk3683Tn2LgS3tNYQk8BlwbP7zO+gOaDVI8G4E4o7zD3TNrHjK8NnqLL4xD7nxCwjZ+3qN8wgHHO71veT7zcwd51AH8y77Nm1LnHwb0P7YfOCfPh4BBlH6BqH1KVG1N\/ja05WuEe8cDsVE2PSaTn9mOW7neBd+I8="
+        },
+        "http:\/\/requestb.in\/1m8wski1"
+      ]
+    },
+    ".result": "configured",
+    "language": "ruby"
+  },
+  "status": 0,
+  "result": 0,
+  "status_message": "Passed",
+  "result_message": "Passed",
+  "started_at": "2014-01-16T08:33:38Z",
+  "finished_at": "2014-01-16T08:33:55Z",
+  "duration": 17,
+  "build_url": "https:\/\/travis-ci.org\/eric\/north-american-bear\/builds\/17048460",
+  "commit": "517eba97d512564491d236a6e754921608e4e43a",
+  "branch": "master",
+  "message": "Update",
+  "compare_url": "https:\/\/github.com\/eric\/north-american-bear\/pull\/1",
+  "committed_at": "2014-01-16T08:32:54Z",
+  "author_name": "Eric Lindvall",
+  "author_email": "eric@5stops.com",
+  "committer_name": "Eric Lindvall",
+  "committer_email": "eric@5stops.com",
+  "matrix": [
+    {
+      "id": 17048461,
+      "repository_id": 1759261,
+      "parent_id": 17048460,
+      "number": "10.1",
+      "state": "finished",
+      "config": {
+        "notifications": {
+          "webhooks": [
+            {
+              "secure": "Xkj77yg3WdQVk3683Tn2LgS3tNYQk8BlwbP7zO+gOaDVI8G4E4o7zD3TNrHjK8NnqLL4xD7nxCwjZ+3qN8wgHHO71veT7zcwd51AH8y77Nm1LnHwb0P7YfOCfPh4BBlH6BqH1KVG1N\/ja05WuEe8cDsVE2PSaTn9mOW7neBd+I8="
+            },
+            "http:\/\/requestb.in\/1m8wski1"
+          ]
+        },
+        ".result": "configured",
+        "language": "ruby"
+      },
+      "status": null,
+      "result": null,
+      "commit": "517eba97d512564491d236a6e754921608e4e43a",
+      "branch": "master",
+      "message": "Update",
+      "compare_url": "https:\/\/github.com\/eric\/north-american-bear\/pull\/1",
+      "committed_at": "2014-01-16T08:32:54Z",
+      "author_name": "Eric Lindvall",
+      "author_email": "eric@5stops.com",
+      "committer_name": "Eric Lindvall",
+      "committer_email": "eric@5stops.com",
+      "finished_at": "2014-01-16T08:33:55Z"
+    }
+  ],
+  "type": "pull_request"
+}
