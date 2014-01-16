@@ -28,30 +28,34 @@
 ; [build] #1867 (5bbfc24) of repo/master failed http://magnum.travis-ci.com/user/repo...
 
 (defn travis-format [request]
-  (let [payload        (-> request :params :payload)
-        data           (json/read-str payload :key-fn keyword)
-        build-number   (data :number)
-        commit         (data :commit)
-        compare-url    (data :compare_url)
-        short-commit   (last (re-find #"\.\.\.(.*)$" compare-url))
-        build-url      (data :build_url)
-        commiter-name  (username-from-email (data :committer_email))
-        repository     (-> data :repository :name)
-        repository-url (-> data :repository :url)
-        branch         (data :branch)
-        status         (lower-case (str (data :result_message)))
-        started-at     (data :started_at)
-        finished-at    (data :finished_at)
-        duration       (duration started-at finished-at)]
+  (let [payload         (-> request :params :payload)
+        data            (json/read-str payload :key-fn keyword)
+        build-number    (data :number)
+        commit          (data :commit)
+        short-commit    (subs commit 0 8)
+        compare-url     (data :compare_url)
+        pull-request    (last (re-find #"/(pull/\d+)$" compare-url))
+        build-url       (data :build_url)
+        commiter-name   (username-from-email (data :committer_email))
+        repository      (-> data :repository :name)
+        repository-url  (-> data :repository :url)
+        branch          (data :branch)
+        repo-and-branch (if pull-request
+                          (str repository "/" pull-request)
+                          (str repository "/" branch))
+        status          (lower-case (str (data :result_message)))
+        started-at      (data :started_at)
+        finished-at     (data :finished_at)
+        duration        (duration started-at finished-at)]
     (format
-      "[build] #%s (<%s|%s>) by %s of <%s|%s/%s> %s in %ds — <%s>"
+      "[build] #%s (<%s|%s>) by %s of <%s|%s> %s in %ds — <%s>"
       build-number compare-url short-commit commiter-name
-      repository-url repository branch status duration
+      repository-url repo-and-branch status duration
       build-url)))
 
 
 (defn travis [request]
-  (prn request)
+  (prn (-> request :params :payload))
   (slack/notify {:username travis-username
                  :icon_url travis-avatar
                  :text (travis-format request)}))
