@@ -8,10 +8,10 @@
                  [org.clojure/data.json "0.2.4"]
                  [ring/ring-json "0.2.0"]
                  [clj-http "0.7.8"]
-                 [clojurewerkz/urly "1.0.0"]]
+                 [clojurewerkz/urly "1.0.0"]
+                 [clj-time "0.6.0"]]
   :uberjar-name "slack-hooks-standalone.jar"
-  :plugins [[lein-ring "0.7.1"]
-            [lein-nodisassemble "0.1.2"]]
+  :plugins [[lein-ring "0.7.1"]]
   :ring {:handler slack-hooks.routes/app}
   :main slack-hooks.core
   :min-lein-version "2.0.0")

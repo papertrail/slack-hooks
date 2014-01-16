@@ -4,4 +4,5 @@ target
 .nrepl-port
 .idea
 *.iml
+*~
 .lein-repl-history
