@@ -6,6 +6,11 @@
             [clj-time.core :as time]
             [clj-time.format :as time-format]))
 
+(def travis-username
+  (get (System/getenv) "TRAVIS_USERNAME" "travis-ci"))
+
+(def travis-avatar
+  (System/getenv "TRAVIS_AVATAR"))
 
 (defn username-from-email [email]
   (last (re-find #"^([^@]+)" (str email))))
@@ -47,5 +52,6 @@
 
 (defn travis [request]
   (prn request)
-  (slack/notify {:username "travis-ci"
+  (slack/notify {:username travis-username
+                 :icon_url travis-avatar
                  :text (travis-format request)}))

@@ -2,4 +2,5 @@ language: clojure
 lein: lein2
 notifications:
   webhooks:
-    secure: tSzRmPrCN/RQtdsmTBOcXM0dVcJ+kb19pidwNz3AUuRPYlpkAvZuOCMir8WldPty4EvllgBVXKWeKIqcnrXC5bP6p7AJOy3D+Ft3x0uOppoSAqY1OBETeDVCRUEcRueNasy0hGJzlqSslyrfzjdQ+4iUhp/HkWo49wLskCnyab4=
+    # - secure: tSzRmPrCN/RQtdsmTBOcXM0dVcJ+kb19pidwNz3AUuRPYlpkAvZuOCMir8WldPty4EvllgBVXKWeKIqcnrXC5bP6p7AJOy3D+Ft3x0uOppoSAqY1OBETeDVCRUEcRueNasy0hGJzlqSslyrfzjdQ+4iUhp/HkWo49wLskCnyab4=
+    secure: "kEkNDcq12tN/UKE+cnuV5mQ+ygPlbWJEfE4lxcyBX+V/jK28WDFZEpkSLHoHdTYRxbDv7OrTmepFLZM39h3viunN33mlQf3jYxwW6GO4CC01roVbicu0R+qqhAXUVR9MjXi8K/OCsTdSx247FfDKHbqXch2Dg7fa0cHGSn05gkA="
