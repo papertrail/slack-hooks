@@ -100,9 +100,9 @@
   (testing "Formatting a Tender update of a re-open"
     (let [text           (slurp "test/resources/tender.json")
           body           (-> (json/read-str text :key-fn keyword)
-                             (assoc-in [:internal] true)
-                             (assoc-in [:system_message] true)
-                             (assoc-in [:body] "The discussion has been re-opened."))
+                             (assoc :internal true)
+                             (assoc :system_message true)
+                             (assoc :body "The discussion has been re-opened."))
           formatted-text (tender/formatted-message {:body body})]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: -&gt; Title>\" was re-opened by user"
              formatted-text))))
@@ -111,9 +111,9 @@
   (testing "Formatting a Tender update of a merge"
     (let [text           (slurp "test/resources/tender.json")
           body           (-> (json/read-str text :key-fn keyword)
-                             (assoc-in [:internal] true)
-                             (assoc-in [:system_message] true)
-                             (assoc-in [:body] "Discussion was merged with \"too-8810\"."))
+                             (assoc :internal true)
+                             (assoc :system_message true)
+                             (assoc :body "Discussion was merged with \"too-8810\"."))
           formatted-text (tender/formatted-message {:body body})]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: -&gt; Title>\" was merged with \"too-8810\" by user"
              formatted-text))))
@@ -121,9 +121,9 @@
   (testing "Formatting a Tender update of a queue add"
     (let [text           (slurp "test/resources/tender.json")
           body           (-> (json/read-str text :key-fn keyword)
-                             (assoc-in [:internal] true)
-                             (assoc-in [:system_message] true)
-                             (assoc-in [:body] "Discussion was added to Requests queue"))
+                             (assoc :internal true)
+                             (assoc :system_message true)
+                             (assoc :body "Discussion was added to Requests queue"))
           formatted-text (tender/formatted-message {:body body})]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: -&gt; Title>\" was added to Requests queue by user"
              formatted-text))))
@@ -131,9 +131,9 @@
   (testing "Formatting a Tender update of an added watcher"
     (let [text           (slurp "test/resources/tender.json")
           body           (-> (json/read-str text :key-fn keyword)
-                             (assoc-in [:internal] true)
-                             (assoc-in [:system_message] true)
-                             (assoc-in [:body] "user@domain.com has been added as a watcher."))
+                             (assoc :internal true)
+                             (assoc :system_message true)
+                             (assoc :body "user@domain.com has been added as a watcher."))
           formatted-text (tender/formatted-message {:body body})]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: -&gt; Title>\" was updated by user: user@domain.com has been added as a watcher."
              formatted-text))))
@@ -142,9 +142,9 @@
   (testing "Formatting a Tender update of discussion to private"
     (let [text           (slurp "test/resources/tender.json")
           body           (-> (json/read-str text :key-fn keyword)
-                             (assoc-in [:internal] true)
-                             (assoc-in [:system_message] true)
-                             (assoc-in [:body] "The discussion is now private."))
+                             (assoc :internal true)
+                             (assoc :system_message true)
+                             (assoc :body "The discussion is now private."))
           formatted-text (tender/formatted-message {:body body})]
       (is (= "[tender] #9539 \"<http://help.app.com/discussions/email/9539#comment_31093891|Re: -&gt; Title>\" was updated by user: The discussion is now private."
              formatted-text))))
