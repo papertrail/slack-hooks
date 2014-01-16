@@ -1,14 +1,28 @@
-# slack-proxy
+# Papertrail's Slack Hooks
 
-A Clojure library designed to ... well, that part is up to you.
+A collection of webhook receivers for Slack
+
+
+## Current support
+
+* Tender
+
+
+## Planned support
+
+* Travis CI
+* GitHub
+* OpsGenie
+* Mandrill
+
 
 ## Usage
 
-FIXME
+Run locally:
 
-## License
+    $ lein ring server-headless
 
-Copyright © 2014 FIXME
+Run on heroku:
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+    $ git push heroku master
+
