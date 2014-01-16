@@ -79,7 +79,7 @@
   "Returns a string describing the given message"
   [request]
   (let [message (message-from-request request)]
-    (format "[tender] #%d \"<%s|%s>\" was %s by %s%s"
+    (format "[tender] #%d <%s|%s> was %s by %s%s"
             (:number message)
             (internal-message-link message)
             (slack/escape (:title message))
