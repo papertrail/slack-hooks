@@ -35,15 +35,21 @@
   (str (swap-base-url (:href message) tender-base-url)
        "#comment_"
        (:last-comment-id message)))
+(defn extract-system-message
+  "Returns the important part of a system message or nil."
+  [text]
+  (last (re-find #"(?:The discussion has been|Discussion was) (.*?)\.?$" text)))
 
 (defn message-action
   "Returns an action that describes the message."
   [message]
   (cond (:new-discussion? message) "opened"
-        (:resolved? message) "resolved"
+        (:resolved? message)       "resolved"
+        (:system-message message)  (:system-message message)
         (and (:internal? message)
-             (not (:system-message? message))) "updated (internal)"
-        :else "updated"))
+             (not (:system-message? message)))
+                                   "updated (internal)"
+        :else                      "updated"))
 
 (defn message-from-request
   "Accepts a map of the body of a Tender webhook and returns a map describing
@@ -60,23 +66,25 @@
      :new-discussion? (= 1 (payload :number))
      :internal?       (payload :internal)
      :resolved?       (= true (payload :resolution))
-     :system-message? (payload :system_message)}))
+     :system-message? (payload :system_message)
+     :system-message  (if (payload :system_message)
+                        (extract-system-message (payload :body)))
+     :system-body     (if (and (payload :system_message) (not (extract-system-message (payload :body))))
+                        (str ": " (payload :body))
+                        "")
+     }))
 
 (defn formatted-message
   "Returns a string describing the given message"
   [request]
-  (let [message (message-from-request request)
-        extras (if (and (:system-message? message)
-                        (not (:resolved? message)))
-                 (str ": " (:body message))
-                 "")]
+  (let [message (message-from-request request)]
     (format "[tender] #%d \"<%s|%s>\" was %s by %s%s"
             (:number message)
             (internal-message-link message)
             (slack/escape (:title message))
             (message-action message)
             (:author message)
-            extras)))
+            (:system-body message))))
 
 (defn tender
   "Accepts an HTTP request from a Tender webhook and reports the details to a
