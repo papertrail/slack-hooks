@@ -15,6 +15,15 @@
 (defn username-from-email [email]
   (last (re-find #"^([^@]+)" (str email))))
 
+(defn pretty-duration
+  "Give a duration in a nice 2m32s format"
+  [seconds]
+  (let [minutes           (int (Math/floor (/ seconds 60)))
+        remaining-seconds (mod seconds 60)]
+    (if (= minutes 0)
+      (str seconds "s")
+      (str minutes "m" remaining-seconds "s"))))
+
 (defn duration
   "Calculate the number of seconds between two times"
   [started-at finished-at]
@@ -46,9 +55,9 @@
         status          (lower-case (str (data :result_message)))
         started-at      (data :started_at)
         finished-at     (data :finished_at)
-        duration        (duration started-at finished-at)]
+        duration        (pretty-duration (duration started-at finished-at))]
     (format
-      "[build] #%s (<%s|%s>) by %s of <%s|%s> %s in %ds — <%s>"
+      "[build] #%s (<%s|%s>) by %s of <%s|%s> %s in %s — <%s>"
       build-number compare-url short-commit commiter-name
       repository-url repo-and-branch status duration
       build-url)))

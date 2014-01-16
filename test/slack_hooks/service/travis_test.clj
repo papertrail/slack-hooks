@@ -18,3 +18,13 @@
           formatted-text  (travis/travis-format request)]
       (is (= "[build] #10 (<https://github.com/eric/north-american-bear/pull/1|517eba97>) by eric of <https://github.com/eric/north-american-bear|north-american-bear/pull/1> passed in 17s — <https://travis-ci.org/eric/north-american-bear/builds/17048460>"
              formatted-text)))))
+
+(deftest pretty-duration-test
+  (testing "zero seconds"
+    (is (= "0s" (travis/pretty-duration 0))))
+
+  (testing "twenty seconds"
+    (is (= "20s" (travis/pretty-duration 20))))
+
+  (testing "one hundred seconds"
+    (is (= "1m40s" (travis/pretty-duration 100)))))
