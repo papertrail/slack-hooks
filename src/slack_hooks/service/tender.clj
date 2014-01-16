@@ -56,23 +56,24 @@
   the message."
   [request]
   (let [payload (:body request)
-        discussion (payload :discussion)]
-    {:href            (payload :html_href)
-     :number          (discussion :number)
-     :title           (discussion :title)
-     :author          (payload :author_name)
-     :last-comment-id (discussion :last_comment_id)
-     :body            (payload :body)
-     :new-discussion? (= 1 (payload :number))
-     :internal?       (payload :internal)
-     :resolved?       (= true (payload :resolution))
-     :system-message? (payload :system_message)
-     :system-message  (if (payload :system_message)
-                        (extract-system-message (payload :body)))
-     :system-body     (if (and (payload :system_message) (not (extract-system-message (payload :body))))
-                        (str ": " (payload :body))
-                        "")
-     }))
+        {:keys [discussion html_href author_name body number internal
+                resolution system_message]} payload
+        {:keys [title last_comment_id]} discussion
+        extracted-system-message (extract-system-message body)]
+    {:href            html_href
+     :number          (:number discussion)
+     :title           title
+     :author          author_name
+     :last-comment-id last_comment_id
+     :body            body
+     :new-discussion? (= 1 number)
+     :internal?       internal
+     :resolved?       (= true resolution)
+     :system-message? system_message
+     :system-message  (if system_message extracted-system-message)
+     :system-body     (if (and system_message (not extracted-system-message))
+                        (str ": " body)
+                        "")}))
 
 (defn formatted-message
   "Returns a string describing the given message"
