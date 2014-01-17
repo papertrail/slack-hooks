@@ -9,8 +9,20 @@
 (def travis-username
   (get (System/getenv) "TRAVIS_USERNAME" "travis-ci"))
 
-(def travis-avatar
-  (System/getenv "TRAVIS_AVATAR"))
+(def travis-avatar-failed
+  (System/getenv "TRAVIS_AVATAR_FAILED"))
+
+(def travis-avatar-passed
+  (System/getenv "TRAVIS_AVATAR_PASSED"))
+
+(defn status-avatar
+  [request]
+  (let [payload (-> request :params :payload)
+        data    (json/read-str payload :key-fn keyword)
+        passing (= (data :result) 0)]
+    (if passing
+      travis-avatar-passed
+      travis-avatar-failed)))
 
 (defn username-from-email [email]
   (last (re-find #"^([^@]+)" (str email))))
@@ -66,5 +78,5 @@
 (defn travis [request]
   (prn (-> request :params :payload))
   (slack/notify {:username travis-username
-                 :icon_url travis-avatar
+                 :icon_url (status-avatar request)
                  :text (travis-format request)}))
