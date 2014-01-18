@@ -9,7 +9,9 @@
   (System/getenv "TENDER_BASE_URL"))
 
 (def tender-username
-  (get (System/getenv) "TENDER_USERNAME" "tender"))
+  (or
+    (System/getenv "TENDER_USERNAME")
+    "tender"))
 
 (def tender-avatar
   (System/getenv "TENDER_AVATAR"))
@@ -19,9 +21,9 @@
   the protocl and host of the base."
   [url base-url]
   (if base-url
-    (let [base-url (urly/url-like base-url)
-          protocol (urly/protocol-of base-url)
-          host (urly/host-of base-url)
+    (let [base-url    (urly/url-like base-url)
+          protocol    (urly/protocol-of base-url)
+          host        (urly/host-of base-url)
           swapped-url (-> url
                           urly/url-like
                           (.mutateProtocol protocol)
@@ -35,21 +37,26 @@
   (str (swap-base-url (:href message) tender-base-url)
        "#comment_"
        (:last-comment-id message)))
+
 (defn extract-system-message
   "Returns the important part of a system message or nil."
   [text]
-  (last (re-find #"(?:The discussion has been|Discussion was) (.*?)\.?$" text)))
+  (last
+    (re-find
+      #"(?:The discussion has been|Discussion was) (.*?)\.?$"
+      text)))
 
 (defn message-action
   "Returns an action that describes the message."
   [message]
-  (cond (:new-discussion? message) "opened"
-        (:resolved? message)       "resolved"
-        (:system-message message)  (:system-message message)
-        (and (:internal? message)
-             (not (:system-message? message)))
-                                   "updated (internal)"
-        :else                      "updated"))
+  (let [system-message (:system-message message)]
+    (cond (:new-discussion? message) "opened"
+          (:resolved? message)       "resolved"
+          system-message             system-message
+          (and (:internal? message) (not (:system-message? message)))
+                                     "updated (internal)"
+          :else                      "updated")))
+
 
 (defn message-from-request
   "Accepts a map of the body of a Tender webhook and returns a map describing

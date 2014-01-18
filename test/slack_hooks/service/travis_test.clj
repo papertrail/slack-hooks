@@ -49,5 +49,11 @@
   (testing "twenty seconds"
     (is (= "20s" (travis/pretty-duration 20))))
 
+  (testing "sixty seconds"
+    (is (= "1m" (travis/pretty-duration 60))))
+
   (testing "one hundred seconds"
-    (is (= "1m40s" (travis/pretty-duration 100)))))
+    (is (= "1m40s" (travis/pretty-duration 100))))
+
+  (testing "one thousand seconds"
+    (is (= "16m40s" (travis/pretty-duration 1000)))))

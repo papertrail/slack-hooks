@@ -7,13 +7,22 @@
             [clj-time.format :as time-format]))
 
 (def travis-username
-  (get (System/getenv) "TRAVIS_USERNAME" "travis-ci"))
+  (or
+    (System/getenv "TRAVIS_USERNAME")
+    "travis-ci"))
+
+(def travis-avatar
+    (System/getenv "TRAVIS_AVATAR"))
 
 (def travis-avatar-failed
-  (System/getenv "TRAVIS_AVATAR_FAILED"))
+  (or
+    (System/getenv "TRAVIS_AVATAR_FAILED")
+    travis-avatar))
 
 (def travis-avatar-passed
-  (System/getenv "TRAVIS_AVATAR_PASSED"))
+  (or
+    (System/getenv "TRAVIS_AVATAR_PASSED")
+    travis-avatar))
 
 (defn status-avatar
   [request]
@@ -30,11 +39,12 @@
 (defn pretty-duration
   "Give a duration in a nice 2m32s format"
   [seconds]
-  (let [minutes           (int (Math/floor (/ seconds 60)))
+  (let [minutes           (quot seconds 60)
         remaining-seconds (mod seconds 60)]
-    (if (= minutes 0)
-      (str seconds "s")
-      (str minutes "m" remaining-seconds "s"))))
+    (cond
+      (= minutes 0)           (str seconds "s")
+      (= remaining-seconds 0) (str minutes "m")
+      :else                   (str minutes "m" remaining-seconds "s"))))
 
 (defn duration
   "Calculate the number of seconds between two times"
@@ -51,24 +61,24 @@
 (defn travis-format [request]
   (let [payload         (-> request :params :payload)
         data            (json/read-str payload :key-fn keyword)
-        build-number    (data :number)
-        commit          (data :commit)
+        build-number    (:number data)
+        commit          (:commit data)
         short-commit    (subs commit 0 8)
-        compare-url     (data :compare_url)
+        compare-url     (:compare_url data)
         pull-request    (last (re-find #"/(pull/\d+)$" compare-url))
-        build-url       (data :build_url)
-        commiter-name   (username-from-email (data :committer_email))
+        build-url       (:build_url data)
+        commiter-name   (username-from-email (:committer_email data))
         repository      (-> data :repository :name)
-        branch          (data :branch)
+        branch          (:branch data)
         repository-url  (str (-> data :repository :url)
                              "/tree/"
                              branch)
         repo-and-branch (if pull-request
                           (str repository "/" pull-request)
                           (str repository "/" branch))
-        status          (lower-case (str (data :result_message)))
-        started-at      (data :started_at)
-        finished-at     (data :finished_at)
+        status          (lower-case (str (:result_message data)))
+        started-at      (:started_at data)
+        finished-at     (:finished_at data)
         duration        (pretty-duration (duration started-at finished-at))]
     (format
       "[build] #%s (<%s|%s>) by %s of <%s|%s> %s in %s — <%s>"
