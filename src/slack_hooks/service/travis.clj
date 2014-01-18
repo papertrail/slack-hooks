@@ -59,8 +59,10 @@
         build-url       (data :build_url)
         commiter-name   (username-from-email (data :committer_email))
         repository      (-> data :repository :name)
-        repository-url  (-> data :repository :url)
         branch          (data :branch)
+        repository-url  (str (-> data :repository :url)
+                             "/tree/"
+                             branch)
         repo-and-branch (if pull-request
                           (str repository "/" pull-request)
                           (str repository "/" branch))

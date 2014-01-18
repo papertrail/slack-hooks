@@ -31,7 +31,7 @@
     (let [text            (slurp "test/resources/travis-ci.json")
           request         {:params {:payload text}}
           formatted-text  (travis/travis-format request)]
-      (is (= "[build] #1 (<https://github.com/eric/north-american-bear/compare/48178e556ef8...1744327fb856|1744327f>) by eric of <https://github.com/eric/north-american-bear|north-american-bear/master> failed in 15s — <https://travis-ci.org/eric/north-american-bear/builds/16906218>"
+      (is (= "[build] #1 (<https://github.com/eric/north-american-bear/compare/48178e556ef8...1744327fb856|1744327f>) by eric of <https://github.com/eric/north-american-bear/tree/master|north-american-bear/master> failed in 15s — <https://travis-ci.org/eric/north-american-bear/builds/16906218>"
              formatted-text))))
 
 
@@ -39,7 +39,7 @@
     (let [text            (slurp "test/resources/travis-ci-pull.json")
           request         {:params {:payload text}}
           formatted-text  (travis/travis-format request)]
-      (is (= "[build] #10 (<https://github.com/eric/north-american-bear/pull/1|517eba97>) by eric of <https://github.com/eric/north-american-bear|north-american-bear/pull/1> passed in 17s — <https://travis-ci.org/eric/north-american-bear/builds/17048460>"
+      (is (= "[build] #10 (<https://github.com/eric/north-american-bear/pull/1|517eba97>) by eric of <https://github.com/eric/north-american-bear/tree/master|north-american-bear/pull/1> passed in 17s — <https://travis-ci.org/eric/north-american-bear/builds/17048460>"
              formatted-text)))))
 
 (deftest pretty-duration-test
