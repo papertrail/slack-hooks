@@ -49,5 +49,6 @@
   [request]
   (let [options {:username opsgenie-username
                  :text (formatted-message request)}]
-    (prn (formatted-message request))
+    (prn request)
+    (prn options)
     (slack/notify options)))
