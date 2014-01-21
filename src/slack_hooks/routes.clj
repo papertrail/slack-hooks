@@ -5,6 +5,7 @@
             [ring.middleware.json :refer [wrap-json-body]]
             [slack-hooks.service.tender :as service.tender]
             [slack-hooks.service.travis :as service.travis]
+            [slack-hooks.service.opsgenie :as service.opsgenie]
             [slack-hooks.service.github :as service.github]))
 
 (defn four-oh-four [request]
@@ -14,7 +15,8 @@
 (def routes-by-uri
   {"/github" service.github/github
    "/travis" service.travis/travis
-   "/tender" service.tender/tender})
+   "/tender" service.tender/tender
+   "/opsgenie" service.opsgenie/opsgenie})
 
 (defn handler [request]
   ((routes-by-uri (:uri request) four-oh-four) request))

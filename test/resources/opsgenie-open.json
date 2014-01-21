@@ -1,0 +1,1 @@
+{"source":{"name":"","type":"email to alert"},"alert":{"message":"Database on fire","username":"System (via API)","alertId":"207ed2a0-f20a-4dcf-9afa-120922c11d97","alias":"","tinyId":"42","entity":"","userId":""},"action":"Create"}
