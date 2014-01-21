@@ -48,7 +48,6 @@
   a Slack webhook."
   [request]
   (let [options {:username opsgenie-username
-                 :channel "#ops"
                  :text (formatted-message request)}]
     (prn (formatted-message request))
     (slack/notify options)))
