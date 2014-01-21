@@ -1,8 +1,5 @@
 (ns slack-hooks.service.tender
-  (:use ring.util.response
-        [clojure.string :only [lower-case]])
-  (:require [clojure.data.json :as json]
-            [slack-hooks.slack :as slack]
+  (:require [slack-hooks.slack :as slack]
             [clojurewerkz.urly.core :as urly]))
 
 (def tender-base-url

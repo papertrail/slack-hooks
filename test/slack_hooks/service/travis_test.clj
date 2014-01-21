@@ -1,6 +1,6 @@
 (ns slack-hooks.service.travis-test
-  (:require [clojure.test :refer :all]
-            [slack-hooks.service.travis :as travis]
+  (:use clojure.test)
+  (:require [slack-hooks.service.travis :as travis]
             [clojure.data.json :as json]))
 
 (deftest status-avatar

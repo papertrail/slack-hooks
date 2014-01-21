@@ -1,10 +1,9 @@
 (ns slack-hooks.service.travis
-  (:use ring.util.response
-        [clojure.string :only [lower-case]])
   (:require [clojure.data.json :as json]
             [slack-hooks.slack :as slack]
             [clj-time.core :as time]
-            [clj-time.format :as time-format]))
+            [clj-time.format :as time-format]
+            [clojure.string :as str]))
 
 (def travis-username
   (or
@@ -76,7 +75,7 @@
         repo-and-branch (if pull-request
                           (str repository "/" pull-request)
                           (str repository "/" branch))
-        status          (lower-case (str (:result_message data)))
+        status          (str/lower-case (str (:result_message data)))
         started-at      (:started_at data)
         finished-at     (:finished_at data)
         duration        (pretty-duration (duration started-at finished-at))]

@@ -1,6 +1,6 @@
 (ns slack-hooks.service.tender-test
-  (:require [clojure.test :refer :all]
-            [slack-hooks.service.tender :as tender]
+  (:use clojure.test)
+  (:require [slack-hooks.service.tender :as tender]
             [clojure.data.json :as json]))
 
 (deftest swap-base-url-test

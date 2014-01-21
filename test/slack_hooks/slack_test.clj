@@ -1,6 +1,6 @@
 (ns slack-hooks.slack-test
-  (:require [clojure.test :refer :all]
-            [slack-hooks.slack :as slack]))
+  (:use clojure.test)
+  (:require [slack-hooks.slack :as slack]))
 
 (deftest escape-test
   (testing "Escapes HTML characters"

@@ -1,9 +1,9 @@
 (ns slack-hooks.routes
-  (:use ring.util.response
-        [ring.middleware.params :only [wrap-params]]
-        [ring.middleware.keyword-params :only [wrap-keyword-params]]
-        [ring.middleware.json :only [wrap-json-body]])
-  (:require [slack-hooks.service.tender :as service.tender]
+  (:use ring.util.response)
+  (:require [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+            [ring.middleware.json :refer [wrap-json-body]]
+            [slack-hooks.service.tender :as service.tender]
             [slack-hooks.service.travis :as service.travis]
             [slack-hooks.service.github :as service.github]))
 
