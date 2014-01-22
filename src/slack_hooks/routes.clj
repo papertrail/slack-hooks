@@ -19,7 +19,12 @@
    "/opsgenie" service.opsgenie/opsgenie})
 
 (defn handler [request]
-  ((routes-by-uri (:uri request) four-oh-four) request))
+  (if-let [route (routes-by-uri (:uri request) four-oh-four)]
+    (if (route request)
+      (response "ok")
+      (-> (response "fail")
+          (status 500)))
+    (four-oh-four)))
 
 (def app
   (-> handler
