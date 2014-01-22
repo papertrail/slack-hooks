@@ -60,9 +60,9 @@
       (is (= "<http://opsg.in/i/42|\"Database on fire\"> deleted by arthur@dent.com"
              formatted))))
 
-  (testing "Formatting an unexpected message"
-    (let [payload   {:message "Database on fire"}
-          formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "{:message \"Database on fire\"}"
-             formatted))))
+  ;(testing "Formatting an unexpected message"
+  ;  (let [payload   {:message "Database on fire"}
+  ;        formatted (opsgenie/formatted-message {:body payload})]
+  ;    (is (= "{:message \"Database on fire\"}"
+  ;           formatted))))
   )
