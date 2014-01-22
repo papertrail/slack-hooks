@@ -30,7 +30,7 @@
       {:description description
        :message  message
        :username username
-       :href     (str "http://opsg.in/" tinyId)})))
+       :href     (str "http://opsg.in/i/" tinyId)})))
 
 (defn formatted-message
   "Returns a description of the given OpsGenie alert."

@@ -8,7 +8,7 @@
     (let [payload   (-> (slurp "test/resources/opsgenie-open.json")
                         (json/read-str :key-fn keyword))
           formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "<http://opsg.in/42|\"Database on fire\"> opened by System (via API)"
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> opened by System (via API)"
              formatted))))
 
   (testing "Formatting an acknowledged OpsGenie alert"
@@ -16,7 +16,7 @@
                         (json/read-str :key-fn keyword)
                         (assoc :action "Acknowledge"))
           formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "<http://opsg.in/42|\"Database on fire\"> acknowledged by arthur@dent.com"
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> acknowledged by arthur@dent.com"
              formatted))))
 
   (testing "Formatting an assigned OpsGenie alert"
@@ -25,7 +25,7 @@
                         (assoc :action "AssignOwnership")
                         (assoc-in [:alert :owner] "ford@prefect.com"))
           formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "<http://opsg.in/42|\"Database on fire\"> assigned to ford@prefect.com by arthur@dent.com"
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> assigned to ford@prefect.com by arthur@dent.com"
              formatted))))
 
   (testing "Formatting an add recipient OpsGenie alert"
@@ -34,14 +34,14 @@
                         (assoc :action "AddRecipient")
                         (assoc-in [:alert :recipient] "ford@prefect.com"))
           formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "<http://opsg.in/42|\"Database on fire\"> recipient added ford@prefect.com by arthur@dent.com"
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> recipient added ford@prefect.com by arthur@dent.com"
              formatted))))
 
   (testing "Formatting a closed OpsGenie alert"
     (let [payload   (-> (slurp "test/resources/opsgenie-close.json")
                         (json/read-str :key-fn keyword))
           formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "<http://opsg.in/42|\"Database on fire\"> closed by arthur@dent.com"
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> closed by arthur@dent.com"
              formatted))))
 
   (testing "Foramtting a deleted OpsGenie alert"
@@ -49,7 +49,7 @@
                         (json/read-str :key-fn keyword)
                         (assoc :action "Delete"))
           formatted (opsgenie/formatted-message {:body payload})]
-      (is (= "<http://opsg.in/42|\"Database on fire\"> deleted by arthur@dent.com"
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> deleted by arthur@dent.com"
              formatted))))
 
   (testing "Formatting an unexpected message"
