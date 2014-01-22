@@ -18,6 +18,7 @@
                  "Acknowledge"     "acknowledged by %s"
                  "AddRecipient"    "recipient added %3$s by %1$s"
                  "AssignOwnership" "assigned to %2$s by %1$s"
+                 "TakeOwnership"   "owned by %s"
                  nil)]
     (format fmt username owner recipient)))
 

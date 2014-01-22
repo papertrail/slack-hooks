@@ -19,6 +19,14 @@
       (is (= "<http://opsg.in/i/42|\"Database on fire\"> acknowledged by arthur@dent.com"
              formatted))))
 
+  (testing "Formatting a taking ownership OpsGenie alert"
+    (let [payload   (-> (slurp "test/resources/opsgenie-close.json")
+                        (json/read-str :key-fn keyword)
+                        (assoc :action "TakeOwnership"))
+          formatted (opsgenie/formatted-message {:body payload})]
+      (is (= "<http://opsg.in/i/42|\"Database on fire\"> owned by arthur@dent.com"
+             formatted))))
+
   (testing "Formatting an assigned OpsGenie alert"
     (let [payload   (-> (slurp "test/resources/opsgenie-close.json")
                         (json/read-str :key-fn keyword)
