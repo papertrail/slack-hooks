@@ -48,6 +48,7 @@
   a Slack webhook."
   [request]
   (let [options {:username opsgenie-username
+                 :icon_url opsgenie-avatar
                  :text (formatted-message request)}]
     (prn request)
     (prn options)

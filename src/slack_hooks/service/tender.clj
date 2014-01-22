@@ -96,6 +96,7 @@
   Slack webhook."
   [request]
   (let [options {:username tender-username
+                 :icon_url tender-avatar
                  :text (formatted-message request)}]
     (prn request)
     (prn options)
