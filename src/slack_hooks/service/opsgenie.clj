@@ -9,40 +9,28 @@
 (def opsgenie-avatar
   (System/getenv "OPSGENIE_AVATAR"))
 
-(defn description-from-action
-  [action username owner recipient]
-  (if-let [fmt (condp = action
-                 "Create"          "opened by %s"
-                 "Close"           "closed by %s"
-                 "Delete"          "deleted by %s"
-                 "Acknowledge"     "acknowledged by %s"
-                 "AddRecipient"    "recipient added %3$s by %1$s"
-                 "AssignOwnership" "assigned to %2$s by %1$s"
-                 "TakeOwnership"   "owned by %s"
-                 nil)]
-    (format fmt username owner recipient)))
-
-(defn message-from-payload
-  [payload]
-  (let [{:keys [action alert]} payload
-        {:keys [message username tinyId owner recipient]} alert]
-    (if-let [description (description-from-action
-                           action username owner recipient)]
-      {:description description
-       :message  message
-       :username username
-       :href     (str "http://opsg.in/i/" tinyId)})))
+(def description-formats-by-action
+  {"Create"          "opened by %s"
+   "Close"           "closed by %s"
+   "Delete"          "deleted by %s"
+   "Acknowledge"     "acknowledged by %s"
+   "AddRecipient"    "recipient added %3$s by %1$s"
+   "AssignOwnership" "assigned to %2$s by %1$s"
+   "TakeOwnership"   "owned by %s"})
 
 (defn formatted-message
   "Returns a description of the given OpsGenie alert."
   [request]
-  (let [payload (:body request)]
-    (if-let [message (message-from-payload payload)]
+  (let [payload (:body request)
+        {:keys [action alert]} payload
+        {:keys [message username tinyId owner recipient]} alert
+        fmt         (description-formats-by-action action "updated by %s with action %4$s")
+        href        (str "http://opsg.in/i/" tinyId)
+        description (format fmt username owner recipient action)]
       (format "<%s|\"%s\"> %s"
-              (:href message)
-              (:message message)
-              (:description message))
-      (str payload))))
+              href
+              message
+              description)))
 
 (defn opsgenie
   "Accepts an HTTP request from an OpsGenie webhook and reports the details to
