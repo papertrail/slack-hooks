@@ -31,7 +31,7 @@
 
 (defn formatted-message
   [request]
-  (let [payload (-> request :params :mandrill_events)]
+  (let [payload (-> request :form-params :mandrill_events)]
     (for [event (json/read-str payload :key-fn keyword)
           :let [description (get event-description (:event event))
                 message     (:msg event)
