@@ -1,0 +1,39 @@
+[{
+  "event":"reject",
+  "_id":"5c48923f65b74b2e85e3913490b487cc",
+  "ts":1390581377,
+  "msg":{
+    "ts":1390581377,
+    "subject":"Database on fire",
+    "email":"arthur@dent.com",
+    "tags":[],
+    "opens":[],
+    "clicks":[],
+    "state":"rejected",
+    "smtp_events":[],
+    "subaccount":null,
+    "resends":[],
+    "_id":"5c48923f65b74b2e85e3913490b487cc",
+    "sender":"support@site.com",
+    "template":null
+  }
+}, {
+  "event":"reject",
+  "_id":"6c48923f65b74b2e85e3913490b487cc",
+  "ts":1390581680,
+  "msg":{
+    "ts":1390581679,
+    "subject":"App under water",
+    "email":"ford@prefect.com",
+    "tags":[],
+    "opens":[],
+    "clicks":[],
+    "state":"rejected",
+    "smtp_events":[],
+    "subaccount":null,
+    "resends":[],
+    "_id":"6c48923f65b74b2e85e3913490b487cc",
+    "sender":"support@site.com",
+    "template":null
+  }
+}]

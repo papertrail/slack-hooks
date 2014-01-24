@@ -1,0 +1,20 @@
+[{
+  "_id":"5c48923f65b74b2e85e3913490b487cc",
+  "event":"reject",
+  "ts":1390580009,
+  "msg":{
+    "_id":"5c48923f65b74b2e85e3913490b487cc",
+    "ts":1390580009,
+    "subject":"Database on fire",
+    "email":"arthur@dent.com",
+    "tags":[],
+    "opens":[],
+    "clicks":[],
+    "state":"rejected",
+    "smtp_events":[],
+    "subaccount":null,
+    "resends":[],
+    "sender":"support@site.com",
+    "template":null
+  }
+}]
