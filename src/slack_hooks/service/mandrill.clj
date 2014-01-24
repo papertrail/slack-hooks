@@ -46,10 +46,12 @@
   "Accepts an HTTP request from a Mandrill webhook and reports the details to
   a Slack webhook."
   [request]
-  (let [options {:username mandrill-username
-                 :icon_url mandrill-avatar
-                 :channel mandrill-channel
-                 :text (formatted-message request)}]
+  (let [base-options {:username mandrill-username
+                      :icon_url mandrill-avatar
+                      :channel  mandrill-channel}]
     (prn request)
-    (prn options)
-    (slack/notify options)))
+    (for [text (formatted-message request)
+          :let [options (assoc base-options :text text)]]
+      (do
+        (prn options)
+        (slack/notify options)))))
