@@ -21,12 +21,14 @@
    "/mandrill" service.mandrill/mandrill})
 
 (defn handler [request]
-  (if-let [route (routes-by-uri (:uri request) four-oh-four)]
-    (if (route request)
-      (response "ok")
-      (-> (response "fail")
-          (status 500)))
-    (four-oh-four)))
+  (if (= :head (:request-method request))
+    (response "ok")
+    (if-let [route (routes-by-uri (:uri request) four-oh-four)]
+      (if (route request)
+        (response "ok")
+        (-> (response "fail")
+            (status 500)))
+      (four-oh-four))))
 
 (def app
   (-> handler
