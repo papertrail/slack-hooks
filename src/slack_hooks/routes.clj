@@ -6,6 +6,7 @@
             [slack-hooks.service.tender :as service.tender]
             [slack-hooks.service.travis :as service.travis]
             [slack-hooks.service.opsgenie :as service.opsgenie]
+            [slack-hooks.service.mandrill :as service.mandrill]
             [slack-hooks.service.github :as service.github]))
 
 (defn four-oh-four [request]
@@ -16,7 +17,8 @@
   {"/github" service.github/github
    "/travis" service.travis/travis
    "/tender" service.tender/tender
-   "/opsgenie" service.opsgenie/opsgenie})
+   "/opsgenie" service.opsgenie/opsgenie
+   "/mandrill" service.mandrill/mandrill})
 
 (defn handler [request]
   (if-let [route (routes-by-uri (:uri request) four-oh-four)]
