@@ -54,4 +54,5 @@
             :let [options (assoc base-options :text text)]]
         (do
           (slack/notify options)
-          options)))))
+          options)))
+    true))
