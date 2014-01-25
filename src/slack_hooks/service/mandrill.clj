@@ -1,8 +1,6 @@
 (ns slack-hooks.service.mandrill
   (:require [clojure.data.json :as json]
             [slack-hooks.slack :as slack]
-            [clj-time.core :as time]
-            [clj-time.format :as time-format]
             [clojure.string :as str]))
 
 (def mandrill-username
@@ -24,10 +22,10 @@
   (str customer-search-base-url email))
 
 (def event-description
-  {"reject" "rejected"
+  {"reject"      "rejected"
    "hard_bounce" "hard bounced"
    "soft_bounce" "soft bounced"
-   "spam" "flagged as spam"})
+   "spam"        "flagged as spam"})
 
 (defn formatted-message
   [request]
@@ -38,9 +36,10 @@
                 recipient   (:email message)
                 sender      (:sender message)
                 subject     (:subject message)]]
-      (format "Email to <%s|%s> from %s was %s: \"%s\""
-              (customer-href recipient)
-              recipient sender description subject))))
+      (do
+        (format "Email to <%s|%s> from %s was %s: \"%s\""
+                (customer-href recipient)
+                recipient sender description subject)))))
 
 (defn mandrill
   "Accepts an HTTP request from a Mandrill webhook and reports the details to
@@ -50,8 +49,9 @@
                       :icon_url mandrill-avatar
                       :channel  mandrill-channel}]
     (prn request)
-    (for [text (formatted-message request)
-          :let [options (assoc base-options :text text)]]
-      (do
-        (prn options)
-        (slack/notify options)))))
+    (prn
+      (for [text (formatted-message request)
+            :let [options (assoc base-options :text text)]]
+        (do
+          (slack/notify options)
+          options)))))
