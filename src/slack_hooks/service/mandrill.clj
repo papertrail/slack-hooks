@@ -36,23 +36,19 @@
                 recipient   (:email message)
                 sender      (:sender message)
                 subject     (:subject message)]]
-      (do
-        (format "Email to <%s|%s> from %s was %s: \"%s\""
-                (customer-href recipient)
-                recipient sender description subject)))))
+      (format "Email to <%s|%s> from %s was %s: \"%s\""
+              (customer-href recipient)
+              recipient sender description subject))))
 
 (defn mandrill
   "Accepts an HTTP request from a Mandrill webhook and reports the details to
   a Slack webhook."
   [request]
+  (prn request)
   (let [base-options {:username mandrill-username
                       :icon_url mandrill-avatar
                       :channel  mandrill-channel}]
-    (prn request)
-    (prn
-      (for [text (formatted-message request)
-            :let [options (assoc base-options :text text)]]
-        (do
-          (slack/notify options)
-          options)))
-    true))
+    (doseq [text (formatted-message request)]
+      (let [options (assoc base-options :text text)]
+        (prn options)
+        (slack/notify options)))))
