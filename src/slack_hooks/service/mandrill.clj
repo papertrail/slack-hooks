@@ -36,10 +36,9 @@
                 recipient   (:email message)
                 sender      (:sender message)
                 subject     (:subject message)]]
-      (do
-        (format "Email to <%s|%s> from %s was %s: \"%s\""
-                (customer-href recipient)
-                recipient sender description subject)))))
+      (format "Email to <%s|%s> from %s was %s: \"%s\""
+              (customer-href recipient)
+              recipient sender description subject))))
 
 (defn mandrill
   "Accepts an HTTP request from a Mandrill webhook and reports the details to
