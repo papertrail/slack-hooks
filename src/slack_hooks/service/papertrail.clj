@@ -16,7 +16,6 @@
 
 (defn formatted-message
   [request]
-  (prn (-> request :form-params (get "payload")))
   (let [payload     (-> request :form-params (get "payload"))
         data        (json/read-str payload :key-fn keyword)
         href        (get-in data [:saved_search :html_search_url])
