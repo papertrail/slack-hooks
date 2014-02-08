@@ -6,14 +6,15 @@ A collection of webhook receivers for Slack
 ## Current support
 
 * Tender
+* OpsGenie
+* Mandrill
+* Travis CI
+* Papertrail
 
 
 ## Planned support
 
-* Travis CI
 * GitHub
-* OpsGenie
-* Mandrill
 
 
 ## Usage
