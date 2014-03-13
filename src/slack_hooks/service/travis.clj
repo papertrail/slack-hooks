@@ -80,5 +80,5 @@
   (prn (-> request :params :payload))
   (slack/notify {:username travis-username
                  :icon_url travis-avatar
-                 :attachments {:text (travis-format request)
-                               :color (status-color request)}}))
+                 :attachments [{:text (travis-format request)
+                               :color (status-color request)}]}))
