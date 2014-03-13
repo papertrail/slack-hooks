@@ -3,28 +3,26 @@
   (:require [slack-hooks.service.travis :as travis]
             [clojure.data.json :as json]))
 
-(deftest status-avatar
-  (with-redefs [travis/travis-avatar-failed "failed.png"
-                travis/travis-avatar-passed "passed.png"]
-    (testing "Passing tests"
-      (let [text    (-> (slurp "test/resources/travis-ci.json")
-                        (json/read-str :key-fn keyword)
-                        (assoc :result 0)
-                        (assoc :status 0)
-                        json/write-str)
-            request {:params {:payload text}}
-            avatar  (travis/status-avatar request)]
-      (is (= "passed.png" avatar))))
+(deftest status-color
+  (testing "Passing tests"
+    (let [text    (-> (slurp "test/resources/travis-ci.json")
+                      (json/read-str :key-fn keyword)
+                      (assoc :result 0)
+                      (assoc :status 0)
+                      json/write-str)
+          request {:params {:payload text}}
+          color   (travis/status-color request)]
+    (is (= "good" color))))
 
-    (testing "Failing tests"
-      (let [text    (-> (slurp "test/resources/travis-ci.json")
-                        (json/read-str :key-fn keyword)
-                        (assoc :result 1)
-                        (assoc :status 1)
-                        json/write-str)
-            request {:params {:payload text}}
-            avatar  (travis/status-avatar request)]
-      (is (= "failed.png" avatar))))))
+  (testing "Failing tests"
+    (let [text    (-> (slurp "test/resources/travis-ci.json")
+                      (json/read-str :key-fn keyword)
+                      (assoc :result 1)
+                      (assoc :status 1)
+                      json/write-str)
+          request {:params {:payload text}}
+          color   (travis/status-color request)]
+    (is (= "danger" color)))))
 
 (deftest formatted-message-test
   (testing "Formatting a Travis CI webhook"
