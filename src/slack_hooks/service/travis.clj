@@ -70,10 +70,9 @@
         finished-at     (:finished_at data)
         duration        (pretty-duration (duration started-at finished-at))]
     (format
-      "[build] #%s (<%s|%s>) by %s of <%s|%s> %s in %s — <%s>"
-      build-number compare-url short-commit commiter-name
-      repository-url repo-and-branch status duration
-      build-url)))
+      "[build] <%s|#%s> (<%s|%s>) by %s of <%s|%s> %s in %s"
+      build-url build-number compare-url short-commit commiter-name
+      repository-url repo-and-branch status duration)))
 
 
 (defn travis [request]
