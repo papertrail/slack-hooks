@@ -45,7 +45,7 @@
 
 
 ; Build #3877 (17e86c0) of repo/master was successful (107s) https://janky/3877/output
-; [build] #1867 (5bbfc24) of repo/master failed http://magnum.travis-ci.com/user/repo...
+; #1867 (5bbfc24) of repo/master failed http://magnum.travis-ci.com/user/repo...
 
 (defn travis-format [request]
   (let [payload         (-> request :params :payload)
@@ -70,7 +70,7 @@
         finished-at     (:finished_at data)
         duration        (pretty-duration (duration started-at finished-at))]
     (format
-      "[build] <%s|#%s> (<%s|%s>) by %s of <%s|%s> %s in %s"
+      "<%s|#%s> (<%s|%s>) by %s of <%s|%s> %s in %s"
       build-url build-number compare-url short-commit commiter-name
       repository-url repo-and-branch status duration)))
 
