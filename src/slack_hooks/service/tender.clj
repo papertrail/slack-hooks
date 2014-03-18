@@ -13,6 +13,11 @@
 (def tender-avatar
   (System/getenv "TENDER_AVATAR"))
 
+(def tender-color
+  (or
+    (System/getenv "TENDER_COLOR")
+    "#6DB4D3"))
+
 (defn swap-base-url
   "Takes a URL and base URL and returns a new URL that is the original with
   the protocl and host of the base."
@@ -95,9 +100,7 @@
   "Accepts an HTTP request from a Tender webhook and reports the details to a
   Slack webhook."
   [request]
-  (let [options {:username tender-username
+  (slack/notify {:username tender-username
                  :icon_url tender-avatar
-                 :text (formatted-message request)}]
-    (prn request)
-    (prn options)
-    (slack/notify options)))
+                 :attachments [{:text (formatted-message request)
+                                :color tender-color}]}))
