@@ -18,6 +18,14 @@
     (System/getenv "TENDER_COLOR")
     "#6DB4D3"))
 
+(defn truncate-string
+  "Take a string and limit it to a certain number of characters"
+  [string limit]
+  (let [truncate-limit (- limit 3)]
+    (if (<= (count string) truncate-limit)
+      string
+      (str (subs string 0 truncate-limit) "..."))))
+
 (defn swap-base-url
   "Takes a URL and base URL and returns a new URL that is the original with
   the protocl and host of the base."
@@ -91,7 +99,7 @@
     (format "#%d <%s|\"%s\"> was %s by %s%s"
             (:number message)
             (internal-message-link message)
-            (slack/escape (:title message))
+            (slack/escape (truncate-string (:title message) 100))
             (message-action message)
             (:author message)
             (:system-body message))))

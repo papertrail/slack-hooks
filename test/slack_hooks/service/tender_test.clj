@@ -97,6 +97,15 @@
       (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user"
              formatted-text))))
 
+  (testing "Formatting a long Tender update"
+    (let [text           (slurp "test/resources/tender.json")
+          body           (json/read-str text :key-fn keyword)
+          discussion     (-> (:discussion body)
+                             (assoc :title "[Support] Assignment: Hello! I was doing something today. Then I wanted to add something else and got an error 'This service is already provisioned.' W... [ANEO-1933]"))
+          formatted-text (tender/formatted-message {:body (assoc body :discussion discussion)})]
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"[Support] Assignment: Hello! I was doing something today. Then I wanted to add something else and...\"> was updated by user"
+             formatted-text))))
+
   (testing "Formatting a Tender update of a re-open"
     (let [text           (slurp "test/resources/tender.json")
           body           (-> (json/read-str text :key-fn keyword)
