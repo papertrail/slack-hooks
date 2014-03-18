@@ -94,7 +94,7 @@
     (let [text           (slurp "test/resources/tender.json")
           body           (json/read-str text :key-fn keyword)
           formatted-text (tender/formatted-message {:body body})]
-      (is (= "[tender] #9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user"
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user"
              formatted-text))))
 
   (testing "Formatting a Tender update of a re-open"
@@ -104,7 +104,7 @@
                              (assoc :system_message true)
                              (assoc :body "The discussion has been re-opened."))
           formatted-text (tender/formatted-message {:body body})]
-      (is (= "[tender] #9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was re-opened by user"
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was re-opened by user"
              formatted-text))))
 
 
@@ -115,7 +115,7 @@
                              (assoc :system_message true)
                              (assoc :body "Discussion was merged with \"too-8810\"."))
           formatted-text (tender/formatted-message {:body body})]
-      (is (= "[tender] #9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was merged with \"too-8810\" by user"
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was merged with \"too-8810\" by user"
              formatted-text))))
 
   (testing "Formatting a Tender update of a queue add"
@@ -125,7 +125,7 @@
                              (assoc :system_message true)
                              (assoc :body "Discussion was added to Requests queue"))
           formatted-text (tender/formatted-message {:body body})]
-      (is (= "[tender] #9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was added to Requests queue by user"
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was added to Requests queue by user"
              formatted-text))))
 
   (testing "Formatting a Tender update of an added watcher"
@@ -135,7 +135,7 @@
                              (assoc :system_message true)
                              (assoc :body "user@domain.com has been added as a watcher."))
           formatted-text (tender/formatted-message {:body body})]
-      (is (= "[tender] #9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user: user@domain.com has been added as a watcher."
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user: user@domain.com has been added as a watcher."
              formatted-text))))
 
 
@@ -146,7 +146,7 @@
                              (assoc :system_message true)
                              (assoc :body "The discussion is now private."))
           formatted-text (tender/formatted-message {:body body})]
-      (is (= "[tender] #9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user: The discussion is now private."
+      (is (= "#9539 <http://help.app.com/discussions/email/9539#comment_31093891|\"Re: -&gt; Title\"> was updated by user: The discussion is now private."
              formatted-text))))
 
   )
