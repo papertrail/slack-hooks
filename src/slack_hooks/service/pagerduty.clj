@@ -94,4 +94,6 @@
     (slack/notify {:username    pagerduty-username
                    :icon_url    pagerduty-avatar
                    :attachments [{:text  (formatted-message message)
-                                  :color (incident-color message)}]})))
+                                  :color (incident-color message)}]}))
+
+  :submitted)
