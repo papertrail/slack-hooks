@@ -24,6 +24,14 @@
       (:subject summary-data)
       (:description summary-data))))
 
+(defn format-user-objects
+  [users]
+  (->> users
+       (map :object)
+       (filter #(= "user" (:type %)))
+       (map #(format "<%s|%s>" (:html_url %) (:name %)))
+       distinct
+       (string/join " & ")))
 
 (defn incident-prefix
   [payload]
@@ -33,26 +41,30 @@
                                (format "New incident from <%s|%s>" service-url service-name))
 
     "incident.acknowledge"   (let [acknowledgers (-> payload :data :incident :acknowledgers)
-                                   names         (->> acknowledgers
-                                                      (map :object)
-                                                      (filter #(= "user" (:type %)))
-                                                      (map #(format "<%s|%s>" (:html_url %) (:name %)))
-                                                      distinct
-                                                      (string/join " & "))]
+                                   names         (format-user-objects acknowledgers)]
                                (format "Acknowledged by %s" names))
+
     "incident.delegate"      (let [assigned-to (-> payload :data :incident :assigned_to)
-                                   names       (->> assigned-to
-                                                    (map :object)
-                                                    (filter #(= "user" (:type %)))
-                                                    (map #(format "<%s|%s>" (:html_url %) (:name %)))
-                                                    distinct
-                                                    (string/join " & "))]
+                                   names       (format-user-objects assigned-to)]
                                (format "Assigned to %s" names))
+
     "incident.resolve"       (let [resolved-by (-> payload :data :incident :resolved_by_user)
                                    html-url     (:html_url resolved-by)
                                    name         (:name resolved-by)]
                                (format "Resolved by <%s|%s>" html-url name))
-    "incident.unacknowledge" "Unacknowledged due to timeout"
+
+    "incident.assign"        (let [assigned-to (-> payload :data :incident :assigned_to)
+                                   names       (format-user-objects assigned-to)]
+                               (format "Assigned to %s" names))
+
+    "incident.escalate"      (let [assigned-to (-> payload :data :incident :assigned_to)
+                                   names       (format-user-objects assigned-to)]
+                               (format "Escalated to %s" names))
+
+    "incident.unacknowledge" (let [assigned-to (-> payload :data :incident :assigned_to)
+                                   names       (format-user-objects assigned-to)]
+                               (format "Unacknowledged due to timeout and reassigned to %s" names))
+
     (format "%s received" (:type payload))))
 
 (defn formatted-message
