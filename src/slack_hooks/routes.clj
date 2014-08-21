@@ -8,7 +8,8 @@
             [slack-hooks.service.opsgenie   :as service.opsgenie]
             [slack-hooks.service.papertrail :as service.papertrail]
             [slack-hooks.service.tender     :as service.tender]
-            [slack-hooks.service.travis     :as service.travis]))
+            [slack-hooks.service.travis     :as service.travis]
+            [slack-hooks.service.pagerduty  :as service.pagerduty]))
 
 (defn four-oh-four [request]
   (-> (response "Page not found")
@@ -20,7 +21,8 @@
    "/opsgenie"   service.opsgenie/opsgenie
    "/papertrail" service.papertrail/papertrail
    "/tender"     service.tender/tender
-   "/travis"     service.travis/travis})
+   "/travis"     service.travis/travis
+   "/pagerduty"  service.pagerduty/pagerduty})
 
 (defn handler [request]
   (if (= :head (:request-method request))
