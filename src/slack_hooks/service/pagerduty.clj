@@ -74,5 +74,5 @@
     (prn "message:" message)
     (slack/notify {:username    pagerduty-username
                    :icon_url    pagerduty-avatar
-                   :attachments [{:text  (formatted-message request)
+                   :attachments [{:text  (formatted-message message)
                                   :color (incident-color message)}]})))
