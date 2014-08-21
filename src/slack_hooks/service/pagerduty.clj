@@ -17,12 +17,6 @@
     "incident.resolve" "good"
     nil))
 
-(defn incident-description
-  [{summary-data :trigger_summary_data}]
-  (or
-    (:subject summary-data)
-    (:description summary-data)))
-
 (defn format-user-objects
   [users]
   (->> users
@@ -71,21 +65,33 @@
 
     (format "%s received" incident-type)))
 
-(defn formatted-message
-  "Returns a description of the given Pagerduty alert."
+(defn incident-title
+  [payload]
+  )
+
+(defn incident-title
+  "Returns a title of the given Pagerduty alert."
   [payload]
   (let [incident        (-> payload :data :incident)
         incident-number (:incident_number incident)
         incident-url    (:html_url incident)
         incident-type   (:type payload)
-        prefix          (incident-prefix incident incident-type)
-        description     (incident-description incident)]
-    (format "<%s|#%s>: %s: %s"
+        prefix          (incident-prefix incident incident-type)]
+    (format "<%s|#%s>: %s"
             incident-url
             incident-number
-            prefix
-            description)))
+            prefix)))
 
+(defn incident-description
+  "Returns the descrption of the given Pagerduty alert."
+  [payload]
+  (let [summary-data (-> payload :data :incident :trigger_summary_data)
+        summary-vals (vals summary-data)]
+    (or
+      (:subject summary-data)
+      (:description summary-data)
+      (if (= 1 (count summary-vals))
+        (first summary-vals)))))
 
 (defn pagerduty
   [request]
@@ -93,7 +99,8 @@
     (prn "message:" message)
     (slack/notify {:username    pagerduty-username
                    :icon_url    pagerduty-avatar
-                   :attachments [{:text  (formatted-message message)
-                                  :color (incident-color message)}]}))
+                   :attachments [{:pretext (incident-title message)
+                                  :text    (incident-description message)
+                                  :color   (incident-color message)}]}))
 
   :submitted)
