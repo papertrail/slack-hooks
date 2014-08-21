@@ -1,0 +1,76 @@
+{
+  "messages": [{
+    "type": "incident.acknowledge",
+    "data": {
+      "incident": {
+        "id": "P3OK5H",
+        "incident_number": 48,
+        "created_on": "2014-08-21T03:47:14Z",
+        "status": "acknowledged",
+        "html_url": "https://your.pagerduty.com/incidents/P3OK5H",
+        "incident_key": "alert-58556573",
+        "service": {
+          "id": "P0SVHU",
+          "name": "Checker",
+          "html_url": "https://your.pagerduty.com/services/P0SVHU",
+          "deleted_at": null
+        },
+        "escalation_policy": {
+          "id": "PKLQGP",
+          "name": "Default",
+          "deleted_at": null
+        },
+        "assigned_to_user": {
+          "id": "PNAO4I",
+          "name": "User",
+          "email": "user@yourapp.com",
+          "html_url": "https://your.pagerduty.com/users/PNAO4I"
+        },
+        "trigger_summary_data": {
+          "description": "Something happened"
+        },
+        "trigger_details_html_url": "https://your.pagerduty.com/incidents/P3OK5H/log_entries/PQDOIK",
+        "trigger_type": "trigger_svc_event",
+        "last_status_change_on": "2014-08-21T03:47:38Z",
+        "last_status_change_by": {
+          "id": "PNAO4I",
+          "name": "User",
+          "email": "user@yourapp.com",
+          "html_url": "https://your.pagerduty.com/users/PNAO4I"
+        },
+        "number_of_escalations": 0,
+        "assigned_to": [{
+          "at": "2014-08-21T03:47:14Z",
+          "object": {
+            "id": "PNAO4I",
+            "name": "User",
+            "email": "user@yourapp.com",
+            "html_url": "https://your.pagerduty.com/users/PNAO4I",
+            "type": "user"
+          }
+        }, {
+          "at": "2014-08-21T03:47:14Z",
+          "object": {
+            "id": "PQY3MV",
+            "name": "User2",
+            "email": "user2@yourapp.com",
+            "html_url": "https://your.pagerduty.com/users/PQY3MV",
+            "type": "user"
+          }
+        }],
+        "acknowledgers": [{
+          "at": "2014-08-21T03:47:38Z",
+          "object": {
+            "id": "PNAO4I",
+            "name": "User",
+            "email": "user@yourapp.com",
+            "html_url": "https://your.pagerduty.com/users/PNAO4I",
+            "type": "user"
+          }
+        }]
+      }
+    },
+    "id": "e53b0631-28e5-11e4-b095-22000ad9bf7",
+    "created_on": "2014-08-21T03:47:38Z"
+  }]
+}

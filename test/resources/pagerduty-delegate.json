@@ -1,0 +1,52 @@
+{
+  "messages": [{
+    "type": "incident.delegate",
+    "data": {
+      "incident": {
+        "id": "PBK84G",
+        "incident_number": 47,
+        "created_on": "2014-08-20T20:09:32-07:00",
+        "status": "triggered",
+        "html_url": "https://your.pagerduty.com/incidents/PBK84G",
+        "incident_key": "3b744afc79dd4c3c89bb5fb8488abce",
+        "service": {
+          "id": "PHLEVA",
+          "name": "Checker",
+          "html_url": "https://your.pagerduty.com/services/PHLEVA",
+          "deleted_at": null
+        },
+        "escalation_policy": {
+          "id": "PY2UQU",
+          "name": "Checker",
+          "deleted_at": null
+        },
+        "assigned_to_user": {
+          "id": "PNAO4I",
+          "name": "User",
+          "email": "user@yourapp.com",
+          "html_url": "https://your.pagerduty.com/users/PNAO4I"
+        },
+        "trigger_summary_data": {
+          "subject": "testing a webhook"
+        },
+        "trigger_details_html_url": "https://your.pagerduty.com/incidents/PBK84G/log_entries/P6W796",
+        "trigger_type": "web_trigger",
+        "last_status_change_on": "2014-08-20T20:11:27-07:00",
+        "last_status_change_by": null,
+        "number_of_escalations": 0,
+        "assigned_to": [{
+          "at": "2014-08-20T20:09:32-07:00",
+          "object": {
+            "id": "PNAO4I",
+            "name": "User",
+            "email": "user@yourapp.com",
+            "html_url": "https://your.pagerduty.com/users/PNAO4I",
+            "type": "user"
+          }
+        }]
+      }
+    },
+    "id": "d70daae0-28e0-11e4-9a4c-f23c9173964",
+    "created_on": "2014-08-21T03:11:26Z"
+  }]
+}
