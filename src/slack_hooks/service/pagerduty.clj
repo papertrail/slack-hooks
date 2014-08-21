@@ -39,29 +39,34 @@
                                    service-url  (-> incident :service :html_url)]
                                (format "New incident from <%s|%s>" service-url service-name))
 
-    "incident.acknowledge"   (let [acknowledgers (-> incident :acknowledgers)
-                                   names         (format-user-objects acknowledgers)]
+    "incident.acknowledge"   (let [names (-> incident
+                                             :acknowledgers
+                                             format-user-objects)]
                                (format "Acknowledged by %s" names))
 
-    "incident.delegate"      (let [assigned-to (-> incident :assigned_to)
-                                   names       (format-user-objects assigned-to)]
+    "incident.delegate"      (let [names (-> incident
+                                             :assigned_to
+                                             format-user-objects)]
                                (format "Assigned to %s" names))
 
-    "incident.resolve"       (let [resolved-by (-> incident :resolved_by_user)
-                                   html-url     (:html_url resolved-by)
-                                   name         (:name resolved-by)]
+    "incident.resolve"       (let [resolved-by (:resolved_by_user incident)
+                                   html-url    (:html_url resolved-by)
+                                   name        (:name resolved-by)]
                                (format "Resolved by <%s|%s>" html-url name))
 
-    "incident.assign"        (let [assigned-to (-> incident :assigned_to)
-                                   names       (format-user-objects assigned-to)]
+    "incident.assign"        (let [names (-> incident
+                                             :assigned_to
+                                             format-user-objects)]
                                (format "Assigned to %s" names))
 
-    "incident.escalate"      (let [assigned-to (-> incident :assigned_to)
-                                   names       (format-user-objects assigned-to)]
+    "incident.escalate"      (let [names (-> incident
+                                             :assigned_to
+                                             format-user-objects)]
                                (format "Escalated to %s" names))
 
-    "incident.unacknowledge" (let [assigned-to (-> incident :assigned_to)
-                                   names       (format-user-objects assigned-to)]
+    "incident.unacknowledge" (let [names (-> incident
+                                             :assigned_to
+                                             format-user-objects)]
                                (format "Unacknowledged due to timeout and reassigned to %s" names))
 
     (format "%s received" incident-type)))
