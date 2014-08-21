@@ -26,7 +26,7 @@
 
 (defn incident-prefix
   [payload]
-  (case (:type payload)
+  (condp = (:type payload)
     "incident.trigger"       (let [service-name (-> payload :data :incident :service :name)
                                    service-url  (-> payload :data :incident :service :html_url)]
                                (format "New incident from <%s|%s>" service-url service-name))
@@ -50,7 +50,7 @@
                                    name         (:name resolved-by)]
                                (format "Resolved by <%s|%s>" html-url name))
     "incident.unacknowledge" "Unacknowledged due to timeout"
-    (format "%s received"    (:type payload))))
+    (format "%s received" (:type payload))))
 
 (defn formatted-message
   "Returns a description of the given Pagerduty alert."
