@@ -69,7 +69,9 @@
 
 (defn pagerduty
   [request]
+  (prn "request body:" (:body request))
   (doseq [message (-> request :body :messages)]
+    (prn "message:" message)
     (slack/notify {:username    pagerduty-username
                    :icon_url    pagerduty-avatar
                    :attachments [{:text  (formatted-message request)
