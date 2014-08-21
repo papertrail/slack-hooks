@@ -18,11 +18,10 @@
     nil))
 
 (defn incident-description
-  [incident]
-  (let [summary-data (:trigger_summary_data incident)]
-    (or
-      (:subject summary-data)
-      (:description summary-data))))
+  [{summary-data :trigger_summary_data}]
+  (or
+    (:subject summary-data)
+    (:description summary-data)))
 
 (defn format-user-objects
   [users]
