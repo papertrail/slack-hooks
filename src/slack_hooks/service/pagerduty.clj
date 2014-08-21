@@ -14,7 +14,7 @@
   [payload]
   (case (:type payload)
     "incident.trigger" "danger"
-    "incident.resolve" "good")
+    "incident.resolve" "good"))
 
 (defn incident-description
   [payload]
@@ -49,7 +49,7 @@
                                    html-url     (:html_url resolved-by)
                                    name         (:name resolved-by)]
                                (format "Resolved by <%s|%s>" html-url name))
-    "incident.unacknowledge" "Unacknowledged due to timeout")
+    "incident.unacknowledge" "Unacknowledged due to timeout"
     (format "%s received"    (:type payload))))
 
 (defn formatted-message
