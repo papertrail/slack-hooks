@@ -12,9 +12,10 @@
 
 (defn incident-color
   [payload]
-  (case (:type payload)
+  (condp = (:type payload)
     "incident.trigger" "danger"
-    "incident.resolve" "good"))
+    "incident.resolve" "good"
+    nil))
 
 (defn incident-description
   [payload]
