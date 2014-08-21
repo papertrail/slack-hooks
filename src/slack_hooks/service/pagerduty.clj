@@ -36,6 +36,7 @@
                                                       (map :object)
                                                       (filter #(= "user" (:type %)))
                                                       (map #(format "<%s|%s>" (:html_url %) (:name %)))
+                                                      distinct
                                                       (string/join " & "))]
                                (format "Acknowledged by %s" names))
     "incident.delegate"      (let [assigned-to (-> payload :data :incident :assigned_to)
@@ -43,6 +44,7 @@
                                                     (map :object)
                                                     (filter #(= "user" (:type %)))
                                                     (map #(format "<%s|%s>" (:html_url %) (:name %)))
+                                                    distinct
                                                     (string/join " & "))]
                                (format "Assigned to %s" names))
     "incident.resolve"       (let [resolved-by (-> payload :data :incident :resolved_by_user)
