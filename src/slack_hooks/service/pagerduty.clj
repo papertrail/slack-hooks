@@ -72,7 +72,6 @@
 
 (defn pagerduty
   [request]
-  (prn "request body:" (:body request))
   (doseq [message (-> request :body :messages)]
     (prn "message:" message)
     (slack/notify {:username    pagerduty-username
