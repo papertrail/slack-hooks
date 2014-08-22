@@ -96,14 +96,23 @@
       (if (= 1 (count summary-vals))
         (first summary-vals)))))
 
+(defn pagerduty-message->slack
+  "Takes an individual message from a PagerDuty webhook and returns a map
+  describing a message to send to Slack"
+  [message]
+  {:title (incident-title message)
+   :description (incident-description message)
+   :color (incident-color message)})
+
 (defn pagerduty
   [request]
-  (doseq [message (-> request :body :messages)]
+  (doseq [message (-> request :body :messages)
+          :let [slack (pagerduty-message->slack message)]]
     (prn "message:" message)
     (slack/notify {:username    pagerduty-username
                    :icon_url    pagerduty-avatar
-                   :attachments [{:pretext (incident-title message)
-                                  :text    (incident-description message)
-                                  :color   (incident-color message)}]}))
+                   :attachments [{:pretext (:title slack)
+                                  :text    (:description slack)
+                                  :color   (:color slack)}]}))
 
   :submitted)

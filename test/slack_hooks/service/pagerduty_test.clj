@@ -109,3 +109,14 @@
                       first)
           color (pagerduty/incident-color payload)]
       (is (= "good" color)))))
+
+(deftest pagerduty-message->slack-test
+  (testing "Slack message from webhook"
+    (let [payload (-> (slurp "test/resources/pagerduty-open.json")
+                      (json/read-str :key-fn keyword)
+                      :messages
+                      first)
+          slack (pagerduty/pagerduty-message->slack payload)]
+      (is (contains? slack :title))
+      (is (contains? slack :description))
+      (is (contains? slack :color)))))
