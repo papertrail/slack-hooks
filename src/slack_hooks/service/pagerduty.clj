@@ -87,7 +87,7 @@
 (defn incident-description
   "Returns the descrption of the given Pagerduty alert."
   [incident]
-  (let [summary-data (-> incident :trigger_summary_data)
+  (let [summary-data (:trigger_summary_data incident)
         summary-vals (vals summary-data)]
     (or
       (:subject summary-data)
