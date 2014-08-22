@@ -11,8 +11,8 @@
   (System/getenv "PAGERDUTY_AVATAR"))
 
 (defn incident-color
-  [payload]
-  (condp = (:type payload)
+  [incident-type]
+  (condp = incident-type
     "incident.trigger" "danger"
     "incident.resolve" "good"
     nil))
@@ -74,11 +74,10 @@
 
 (defn incident-title
   "Returns a title of the given Pagerduty alert."
-  [payload]
-  (let [incident        (-> payload :data :incident)
-        incident-number (:incident_number incident)
+  [incident incident-type]
+  (let [incident-number (:incident_number incident)
         incident-url    (:html_url incident)
-        incident-type   (:type payload)
+        incident-type   incident-type
         prefix          (incident-prefix incident incident-type)]
     (format "<%s|#%s>: %s"
             incident-url
@@ -87,8 +86,8 @@
 
 (defn incident-description
   "Returns the descrption of the given Pagerduty alert."
-  [payload]
-  (let [summary-data (-> payload :data :incident :trigger_summary_data)
+  [incident]
+  (let [summary-data (-> incident :trigger_summary_data)
         summary-vals (vals summary-data)]
     (or
       (:subject summary-data)
@@ -100,9 +99,11 @@
   "Takes an individual message from a PagerDuty webhook and returns a map
   describing a message to send to Slack"
   [message]
-  {:title (incident-title message)
-   :description (incident-description message)
-   :color (incident-color message)})
+  (let [incident      (-> message :data :incident)
+        incident-type (:type message)]
+    {:title       (incident-title incident incident-type)
+     :description (incident-description incident)
+     :color       (incident-color incident-type)}))
 
 (defn pagerduty
   [request]

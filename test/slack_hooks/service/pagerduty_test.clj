@@ -9,7 +9,9 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-title payload)]
+          incident (-> payload :data :incident)
+          incident-type (:type payload)
+          formatted (pagerduty/incident-title incident incident-type)]
       (is (= "<https://your.pagerduty.com/incidents/P3OK5H|#48>: New incident from <https://your.pagerduty.com/services/P0SVHU|Checker>"
              formatted))))
 
@@ -18,7 +20,9 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-title payload)]
+          incident (-> payload :data :incident)
+          incident-type (:type payload)
+          formatted (pagerduty/incident-title incident incident-type)]
       (is (= "<https://your.pagerduty.com/incidents/P3OK5H|#48>: Acknowledged by <https://your.pagerduty.com/users/PNAO4I|User>"
              formatted))))
 
@@ -27,7 +31,9 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-title payload)]
+          incident (-> payload :data :incident)
+          incident-type (:type payload)
+          formatted (pagerduty/incident-title incident incident-type)]
       (is (= "<https://your.pagerduty.com/incidents/PBK84G|#47>: Assigned to <https://your.pagerduty.com/users/PNAO4I|User>"
              formatted))))
 
@@ -36,7 +42,9 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-title payload)]
+          incident (-> payload :data :incident)
+          incident-type (:type payload)
+          formatted (pagerduty/incident-title incident incident-type)]
       (is (= "<https://your.pagerduty.com/incidents/P3OK5H|#48>: Resolved by <https://your.pagerduty.com/users/PNAO4I|User>"
              formatted)))))
 
@@ -46,7 +54,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-description payload)]
+          incident (-> payload :data :incident)
+          formatted (pagerduty/incident-description incident)]
       (is (= "Alert text"
              formatted))))
 
@@ -55,7 +64,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-description payload)]
+          incident (-> payload :data :incident)
+          formatted (pagerduty/incident-description incident)]
       (is (= "Something happened"
              formatted))))
 
@@ -64,7 +74,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-description payload)]
+          incident (-> payload :data :incident)
+          formatted (pagerduty/incident-description incident)]
       (is (= "testing a webhook"
              formatted))))
 
@@ -73,7 +84,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          formatted (pagerduty/incident-description payload)]
+          incident (-> payload :data :incident)
+          formatted (pagerduty/incident-description incident)]
       (is (= "an alert"
              formatted)))))
 
@@ -83,7 +95,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          color (pagerduty/incident-color payload)]
+          incident-type (:type payload)
+          color (pagerduty/incident-color incident-type)]
       (is (= "danger" color))))
 
   (testing "Color of a Pagerduty acknowledge"
@@ -91,7 +104,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          color (pagerduty/incident-color payload)]
+          incident-type (:type payload)
+          color (pagerduty/incident-color incident-type)]
       (is (= nil color))))
 
   (testing "Color of a Pagerduty delegate"
@@ -99,7 +113,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          color (pagerduty/incident-color payload)]
+          incident-type (:type payload)
+          color (pagerduty/incident-color incident-type)]
       (is (= nil color))))
 
   (testing "Color of a Pagerduty resolve"
@@ -107,7 +122,8 @@
                       (json/read-str :key-fn keyword)
                       :messages
                       first)
-          color (pagerduty/incident-color payload)]
+          incident-type (:type payload)
+          color (pagerduty/incident-color incident-type)]
       (is (= "good" color)))))
 
 (deftest pagerduty-message->slack-test
