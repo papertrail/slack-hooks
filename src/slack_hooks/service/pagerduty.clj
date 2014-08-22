@@ -39,8 +39,11 @@
                                (let [html-url    (:html_url resolved-by)
                                      name        (:name resolved-by)]
                                  (format "Resolved by <%s|%s>" html-url name))
-                               "Resolved automatically")
-
+                               (let [service-name (-> incident :service :name)
+                                     service-url  (-> incident :service :html_url)]
+                                 (if service-url
+                                   (format "Resolved by <%s|%s>" service-url service-name)
+                                   (format "Resolvedy by %s" service-name))))
 
     "incident.acknowledge"   (->> incident
                                   :acknowledgers
