@@ -77,7 +77,6 @@
   [incident incident-type]
   (let [incident-number (:incident_number incident)
         incident-url    (:html_url incident)
-        incident-type   incident-type
         prefix          (incident-prefix incident incident-type)]
     (format "<%s|#%s>: %s"
             incident-url
