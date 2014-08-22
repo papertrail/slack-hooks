@@ -76,3 +76,36 @@
           formatted (pagerduty/incident-description payload)]
       (is (= "an alert"
              formatted)))))
+
+(deftest incident-color-test
+  (testing "Color of a Pagerduty open"
+    (let [payload (-> (slurp "test/resources/pagerduty-open.json")
+                      (json/read-str :key-fn keyword)
+                      :messages
+                      first)
+          color (pagerduty/incident-color payload)]
+      (is (= "danger" color))))
+
+  (testing "Color of a Pagerduty acknowledge"
+    (let [payload (-> (slurp "test/resources/pagerduty-acknowledge.json")
+                      (json/read-str :key-fn keyword)
+                      :messages
+                      first)
+          color (pagerduty/incident-color payload)]
+      (is (= nil color))))
+
+  (testing "Color of a Pagerduty delegate"
+    (let [payload (-> (slurp "test/resources/pagerduty-delegate.json")
+                      (json/read-str :key-fn keyword)
+                      :messages
+                      first)
+          color (pagerduty/incident-color payload)]
+      (is (= nil color))))
+
+  (testing "Color of a Pagerduty resolve"
+    (let [payload (-> (slurp "test/resources/pagerduty-resolve.json")
+                      (json/read-str :key-fn keyword)
+                      :messages
+                      first)
+          color (pagerduty/incident-color payload)]
+      (is (= "good" color)))))
