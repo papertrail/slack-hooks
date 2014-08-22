@@ -31,7 +31,9 @@
   (condp = incident-type
     "incident.trigger"       (let [service-name (-> incident :service :name)
                                    service-url  (-> incident :service :html_url)]
-                               (format "New incident from <%s|%s>" service-url service-name))
+                               (if service-url
+                                 (format "New incident from <%s|%s>" service-url service-name)
+                                 (format "New incident from %s" service-name)))
 
     "incident.resolve"       (let [resolved-by (:resolved_by_user incident)
                                    html-url    (:html_url resolved-by)
