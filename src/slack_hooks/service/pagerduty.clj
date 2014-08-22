@@ -73,10 +73,6 @@
     (format "%s received" incident-type)))
 
 (defn incident-title
-  [payload]
-  )
-
-(defn incident-title
   "Returns a title of the given Pagerduty alert."
   [payload]
   (let [incident        (-> payload :data :incident)
