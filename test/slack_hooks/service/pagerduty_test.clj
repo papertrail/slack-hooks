@@ -46,6 +46,19 @@
           incident-type (:type payload)
           formatted (pagerduty/incident-title incident incident-type)]
       (is (= "<https://your.pagerduty.com/incidents/P3OK5H|#48>: Resolved by <https://your.pagerduty.com/users/PNAO4I|User>"
+             formatted))))
+
+  (testing "Formatting a Pagerduty resolve without user url"
+    (let [payload (-> (slurp "test/resources/pagerduty-resolve.json")
+                      (json/read-str :key-fn keyword)
+                      :messages
+                      first
+                      (update-in [:data :incident :resolved_by_user]
+                                 dissoc :html_url))
+          incident (-> payload :data :incident)
+          incident-type (:type payload)
+          formatted (pagerduty/incident-title incident incident-type)]
+      (is (= "<https://your.pagerduty.com/incidents/P3OK5H|#48>: Resolved by User"
              formatted)))))
 
 (deftest incident-description-test

@@ -36,14 +36,16 @@
                                  (format "New incident from %s" service-name)))
 
     "incident.resolve"       (if-let [resolved-by (:resolved_by_user incident)]
-                               (let [html-url    (:html_url resolved-by)
-                                     name        (:name resolved-by)]
-                                 (format "Resolved by <%s|%s>" html-url name))
+                               (let [name     (:name resolved-by)
+                                     html-url (:html_url resolved-by)]
+                                 (if html-url
+                                   (format "Resolved by <%s|%s>" html-url name)
+                                   (format "Resolved by %s" name)))
                                (let [service-name (-> incident :service :name)
                                      service-url  (-> incident :service :html_url)]
                                  (if service-url
                                    (format "Resolved by <%s|%s>" service-url service-name)
-                                   (format "Resolvedy by %s" service-name))))
+                                   (format "Resolved by %s" service-name))))
 
     "incident.acknowledge"   (->> incident
                                   :acknowledgers
