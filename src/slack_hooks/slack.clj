@@ -9,6 +9,12 @@
   [message]
   (clojure.string/escape message {\< "&lt;" \> "&gt;"}))
 
+(defn link-to
+  [text url]
+  (if url
+    (format "<%s|%s>" url text)
+    text))
+
 (defn notify [data]
   (client/post slack-url
     {:insecure? true  ;; Temporary until we're able to figure out how to

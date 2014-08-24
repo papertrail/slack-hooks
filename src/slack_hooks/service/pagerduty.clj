@@ -22,7 +22,7 @@
   (->> users
        (map :object)
        (filter #(= "user" (:type %)))
-       (map #(format "<%s|%s>" (:html_url %) (:name %)))
+       (map #(slack/link-to (:name %) (:html_url %)))
        distinct
        (string/join " & ")))
 
@@ -31,21 +31,15 @@
   (condp = incident-type
     "incident.trigger"       (let [service-name (-> incident :service :name)
                                    service-url  (-> incident :service :html_url)]
-                               (if service-url
-                                 (format "New incident from <%s|%s>" service-url service-name)
-                                 (format "New incident from %s" service-name)))
+                               (format "New incident from %s" (slack/link-to service-name service-url)))
 
     "incident.resolve"       (if-let [resolved-by (:resolved_by_user incident)]
                                (let [name     (:name resolved-by)
                                      html-url (:html_url resolved-by)]
-                                 (if html-url
-                                   (format "Resolved by <%s|%s>" html-url name)
-                                   (format "Resolved by %s" name)))
+                                 (format "Resolved by %s" (slack/link-to name html-url)))
                                (let [service-name (-> incident :service :name)
                                      service-url  (-> incident :service :html_url)]
-                                 (if service-url
-                                   (format "Resolved by <%s|%s>" service-url service-name)
-                                   (format "Resolved by %s" service-name))))
+                                 (format "Resolved by %s" (slack/link-to service-name service-url))))
 
     "incident.acknowledge"   (->> incident
                                   :acknowledgers
