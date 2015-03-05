@@ -59,8 +59,9 @@
         commiter-name   (username-from-email (:committer_email data))
         repository      (-> data :repository :name)
         branch          (:branch data)
-        repository-url  (str (-> data :repository :url)
-                             "/tree/"
+        repository-url  (format "https://github.com/%s/%s/tree/%s"
+                             (-> data :repository :owner_name)
+                             (-> data :repository :name)
                              branch)
         repo-and-branch (if pull-request
                           (str repository "/" pull-request)
