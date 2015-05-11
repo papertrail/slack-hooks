@@ -12,7 +12,7 @@
 
 (defn incident-color
   [incident-type]
-  (condp = incident-type
+  (case incident-type
     "incident.trigger" "danger"
     "incident.resolve" "good"
     nil))
@@ -28,7 +28,7 @@
 
 (defn incident-prefix
   [incident incident-type]
-  (condp = incident-type
+  (case incident-type
     "incident.trigger"       (let [service-name (-> incident :service :name)
                                    service-url  (-> incident :service :html_url)]
                                (format "New incident from %s" (slack/link-to service-name service-url)))
