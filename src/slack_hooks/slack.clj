@@ -16,8 +16,10 @@
     text))
 
 (defn notify [data]
-  (client/post slack-url
-    {:insecure? true  ;; Temporary until we're able to figure out how to
-                      ;; properly validate Slack's SSL cert.
-     :content-type :json
-     :form-params data}))
+  (let [post-url (or (:slack-url data) slack-url)
+        slack-data (dissoc data :slack-url)]
+    (client/post post-url
+                 {:insecure? true  ;; Temporary until we're able to figure out how to
+                  ;; properly validate Slack's SSL cert.
+                  :content-type :json
+                  :form-params slack-data})))

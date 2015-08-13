@@ -18,6 +18,9 @@
     (System/getenv "TENDER_COLOR")
     "#6DB4D3"))
 
+(def tender-slack-url
+  (System/getenv "TENDER_SLACK_URL"))
+
 (defn truncate-string
   "Take a string and limit it to a certain number of characters"
   [string limit]
@@ -108,7 +111,8 @@
   "Accepts an HTTP request from a Tender webhook and reports the details to a
   Slack webhook."
   [request]
-  (slack/notify {:username tender-username
-                 :icon_url tender-avatar
+  (slack/notify {:slack-url   (or (-> request :params :slack_url) tender-slack-url)
+                 :username    tender-username
+                 :icon_url    tender-avatar
                  :attachments [{:text (formatted-message request)
                                 :color tender-color}]}))

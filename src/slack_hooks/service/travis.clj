@@ -11,7 +11,10 @@
     "travis-ci"))
 
 (def travis-avatar
-    (System/getenv "TRAVIS_AVATAR"))
+  (System/getenv "TRAVIS_AVATAR"))
+
+(def travis-slack-url
+  (System/getenv "TRAVIS_SLACK_URL"))
 
 (defn status-color
   [request]
@@ -77,8 +80,9 @@
 
 
 (defn travis [request]
-  (prn (-> request :params :payload))
-  (slack/notify {:username travis-username
-                 :icon_url travis-avatar
+  ; (prn (-> request :params :payload))
+  (slack/notify {:slack-url   (or (-> request :params :slack_url) travis-slack-url)
+                 :username    travis-username
+                 :icon_url    travis-avatar
                  :attachments [{:text (travis-format request)
                                :color (status-color request)}]}))
