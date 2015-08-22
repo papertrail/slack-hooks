@@ -39,7 +39,7 @@
             exception-message       (:value exception)
             exception-short-message (truncate-string (first (string/split-lines (str exception-message))) 100)
 
-            important-source        (string/join (map important-frame [:pre_context :context_line :post_context]))
+            important-source        (string/join (flatten (map important-frame [:pre_context :context_line :post_context])))
             important-line          (apply format "%s:%d: in `%s'" (map important-frame [:filename :lineno :function]))]
         {:title              (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
                                      exception-class exception-short-message)
