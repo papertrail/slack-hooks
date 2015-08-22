@@ -4,15 +4,17 @@
             [clojure.string :as string]))
 
 (def sentry-username
-     (or
-       (System/getenv "SENTRY_USERNAME")
-       "sentry"))
+   (or
+     (System/getenv "SENTRY_USERNAME")
+     "sentry"))
 
 (def sentry-avatar
-     (System/getenv "SENTRY_AVATAR"))
+  (or
+    (System/getenv "SENTRY_AVATAR")
+    "https://slack.global.ssl.fastly.net/66f9/img/services/sentry_128.png"))
 
 (def sentry-slack-url
-     (System/getenv "SENTRY_SLACK_URL"))
+   (System/getenv "SENTRY_SLACK_URL"))
 
 (defn truncate-string
   ([string length suffix]
@@ -39,9 +41,10 @@
 
             important-source        (string/join (map important-frame [:pre_context :context_line :post_context]))
             important-line          (apply format "%s:%d: in `%s'" (map important-frame [:filename :lineno :function]))]
-        {:title       (format "%s: %s: <%s|%s: %s>" project project-name exception-url
-                              exception-class exception-short-message)
-         :description (format "%s\n```%s```" important-line important-source)
+        {:title              (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
+                                     exception-class exception-short-message)
+         :description        (format "%s\n```%s```" important-line important-source)
+         :simple-description important-line
          }))))
 
 (defn sentry [request]
@@ -50,6 +53,8 @@
     (slack/notify {:slack-url   (or (-> request :params :slack_url) sentry-slack-url)
                    :username    sentry-username
                    :icon_url    sentry-avatar
-                   :attachments [{:pretext (:title data)
-                                  :text    (:description data)
-                                  :color   "danger"}]})))
+                   :attachments [{:pretext   (:title data)
+                                  :text      (:description data)
+                                  :fallback  (:simple-description data)
+                                  :color     "danger"
+                                  :mrkdwn_in ["text" "pretext"]}]})))
