@@ -49,7 +49,7 @@
         project-name            (:project_name message)
         exception-url           (:url message)
         exception               (-> message :event :sentry.interfaces.Exception :values first)
-        important-frame         (first (filter :in_app (-> exception :stacktrace :frames)))]
+        important-frame         (last (filter :in_app (-> exception :stacktrace :frames)))]
     (if (and exception important-frame)
       (let [exception-class         (:type exception)
             exception-message       (:value exception)
