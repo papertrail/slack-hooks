@@ -73,5 +73,5 @@
                    :attachments [{:pretext   (:title data)
                                   :text      (:description data)
                                   :fallback  (:simple-description data)
-                                  :color     "danger"
+                                  :color     "#f43f20"
                                   :mrkdwn_in ["text" "pretext"]}]})))
