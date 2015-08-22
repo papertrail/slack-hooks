@@ -1,0 +1,156 @@
+{
+  "project":"project",
+  "project_name":"projectname",
+  "culprit":"bin/raven in <main> at line 36",
+  "level":"error",
+  "url":"https://beta.getsentry.com/project/project/group/123/",
+  "logger":"",
+  "message":"This is an example Ruby exception",
+  "id":"1413",
+  "event":{
+    "sentry.interfaces.User":{
+      "username":"getsentry",
+      "id":"1671",
+      "email":"foo@example.com"
+    },
+    "sentry.interfaces.Exception":{
+      "exc_omitted":null,
+      "values":[
+        {
+          "stacktrace":{
+            "frames":[
+              {
+                "function":"<main>",
+                "abs_path":"bin/raven",
+                "pre_context":[
+                  "    if !dsn\n",
+                  "      puts \"Usage: raven test <dsn>\"\n",
+                  "    else\n"
+                ],
+                "post_context":[
+                  "    end\n",
+                  "  else\n",
+                  "    puts parser\n"
+                ],
+                "in_app":true,
+                "lineno":36,
+                "filename":"bin/raven",
+                "context_line":"      Raven::CLI::test(dsn)\n"
+              },
+              {
+                "function":"test",
+                "abs_path":"/Users/User/Development/raven-ruby/lib/raven/cli.rb",
+                "pre_context":[
+                  "      puts \"\"\n",
+                  "\n",
+                  "      begin\n"
+                ],
+                "post_context":[
+                  "      rescue ZeroDivisionError => exception\n",
+                  "        evt = Raven.capture_exception(exception)\n",
+                  "      end\n"
+                ],
+                "in_app":false,
+                "lineno":31,
+                "filename":"raven/cli.rb",
+                "context_line":"        1 / 0\n"
+              },
+              {
+                "function":"/",
+                "abs_path":"/Users/User/Development/raven-ruby/lib/raven/cli.rb",
+                "pre_context":[
+                  "      puts \"\"\n",
+                  "\n",
+                  "      begin\n"
+                ],
+                "post_context":[
+                  "      rescue ZeroDivisionError => exception\n",
+                  "        evt = Raven.capture_exception(exception)\n",
+                  "      end\n"
+                ],
+                "in_app":false,
+                "lineno":31,
+                "filename":"raven/cli.rb",
+                "context_line":"        1 / 0\n"
+              }
+            ],
+            "frames_omitted":null
+          },
+          "type":"ZeroDivisionError",
+          "module":"",
+          "value":"divided by 0"
+        }
+      ]
+    },
+    "errors":[
+
+    ],
+    "tags":[
+      [
+        "browser",
+        "Chrome 28.0"
+      ],
+      [
+        "device",
+        "Other"
+      ],
+      [
+        "interface_type",
+        "Exception"
+      ],
+      [
+        "interface_type",
+        "Http"
+      ],
+      [
+        "interface_type",
+        "User"
+      ],
+      [
+        "level",
+        "error"
+      ],
+      [
+        "os",
+        "Windows 8"
+      ],
+      [
+        "url",
+        "http://example.com/foo"
+      ]
+    ],
+    "extra":{
+      "session":{
+        "foo":"bar"
+      },
+      "results":[
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "emptyList":[
+
+      ],
+      "emptyMap":{
+
+      }
+    },
+    "modules":{
+      "my.package":"1.0.0"
+    },
+    "sentry.interfaces.Http":{
+      "url":"http://example.com/foo",
+      "headers":{
+        "Referer":"http://example.com",
+        "Content-Type":"application/json",
+        "User-Agent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.72 Safari/537.36"
+      },
+      "data":"{\"hello\": \"world\"}",
+      "query_string":"foo=bar",
+      "method":"GET"
+    },
+    "version":"5"
+  }
+}
