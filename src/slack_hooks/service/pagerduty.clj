@@ -108,7 +108,7 @@
   (doseq [message (-> request :body :messages)
           :let [slack (pagerduty-message->slack message)]]
     (prn "message:" message)
-    (slack/notify {:slack-url   (or (-> request :params :slack-url) pagerduty-slack-url)
+    (slack/notify {:slack-url   (or (-> request :params :slack_url) pagerduty-slack-url)
                    :username    pagerduty-username
                    :icon_url    pagerduty-avatar
                    :attachments [{:pretext (:title slack)
