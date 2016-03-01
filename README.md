@@ -10,7 +10,7 @@ A collection of webhook receivers for Slack
 * Mandrill
 * Travis CI
 * Papertrail
-
+* Scout
 
 ## Planned support
 
@@ -26,4 +26,3 @@ Run locally:
 Run on heroku:
 
     $ git push heroku master
-
