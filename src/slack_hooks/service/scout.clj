@@ -39,11 +39,11 @@
 
         ]
         (merge {
-          :title (str (if (= alert_status "end") "Resolved: " "" ) (format "%s on %s" alert_name server_name))
+          :title      (str (if (= alert_status "end") "Resolved: " "" ) (format "%s on %s" alert_name server_name))
           :title_link alert_url
-          :text (format "%s - %s" alert_name alert_message)
-          :fallback (format "[Alert %s] %s on %s - %s" alert_status alert_name server_name alert_url)
-          :color (alert-color alert_status)
+          :text       alert_message
+          :fallback   (format "[Alert %s] %s on %s - %s" alert_status alert_name server_name alert_url)
+          :color      (alert-color alert_status)
         }
         (if (not= alert_status "end") {:image_url sparkline_url} nil))
         ))
