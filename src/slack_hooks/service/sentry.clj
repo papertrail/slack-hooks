@@ -65,8 +65,8 @@
          }))))
 
 (defn sentry [request]
-  (let [data (sentry->slack (:body request))]
-    (prn "sentry:" (:body request))
+  (prn "sentry:" (:body request))
+  (if-let [data (sentry->slack (:body request))]
     (slack/notify {:slack-url   (or (-> request :params :slack_url) sentry-slack-url)
                    :username    sentry-username
                    :icon_url    sentry-avatar
