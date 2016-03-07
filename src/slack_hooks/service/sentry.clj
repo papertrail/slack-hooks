@@ -76,22 +76,24 @@
      (frame->location frame))))
 
 (defn sentry->slack [message]
-  (let [project                 (:project message)
-        project-name            (:project_name message)
-        exception-url           (:url message)
-        exception               (-> message :event :sentry.interfaces.Exception :values first)
-        important-frame         (last (filter :in_app (-> exception :stacktrace :frames)))]
-    (if (and exception important-frame)
+  (let [project         (:project message)
+        project-name    (:project_name message)
+        exception-url   (:url message)
+        exception       (-> message :event :sentry.interfaces.Exception :values first)
+        important-frame (last (filter :in_app (-> exception :stacktrace :frames)))]
+    (if exception
       (let [exception-class         (:type exception)
             exception-message       (:value exception)
-            exception-short-message (truncate-string (first (string/split-lines (str exception-message))) 100)
-            important-line          (frame->location important-frame)]
-        (prn important-frame)
-        {:title              (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
-                                     exception-class (slack-escape exception-short-message))
-         :description        (frame->description important-frame)
-         :simple-description important-line
-         }))))
+            exception-short-message (truncate-string (first (string/split-lines (str exception-message))) 100)]
+        (if important-frame
+          (let [important-line (frame->location important-frame)]
+            {:title              (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
+                                         exception-class (slack-escape exception-short-message))
+             :description        (frame->description important-frame)
+             :simple-description important-line
+             })
+          {:title (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
+                          exception-class (slack-escape exception-short-message))})))))
 
 (defn sentry [request]
   (prn "sentry:" (:body request))
