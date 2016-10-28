@@ -171,7 +171,7 @@
 (defn offending-sources [violations]
   (distinct (flatten (map (fn [s]
                           (let [source (first s)]
-                            (map (fn [m] (format "- %s, reaching %.2f" (name source) (:value m)) )  (first (rest s)))
+                            (map (fn [m] (format "- %s, reaching %s" (name source) (:value m)) )  (first (rest s)))
                           )) violations)))
   )
 
