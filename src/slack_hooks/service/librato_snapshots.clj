@@ -190,10 +190,10 @@
         sources         (offending-sources violations)
         space-link      (librato-api-url (str/join ["/spaces" librato-space-id] ))
         slack-message   {
-          :title      (str alert-name "has fired!")
+          :title      (str alert-name " has fired!")
           :title_link (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
           :image_url  snapshot
-          :text       (str/join "\n" [(str text_1 " on:") (str/join sources) (str "<" space-link "|Alerting Chart>")])
+          :text       (str/join "\n" [(str text_1) (str "<" space-link "|Alerting Chart>")])
           :fallback   (str alert-name "has fired!")
         }
         ]
