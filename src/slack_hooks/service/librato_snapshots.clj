@@ -188,7 +188,7 @@
         snapshot        (snapshot-image (snapshot-chart chart chart-duration) 1)
         text_1          (first (metric-message conditions violations))
         sources         (offending-sources violations)
-        space-link      (librato-api-url (str/join ["/spaces/" librato-space-id] ))
+        space-link      (str/join ["https://metrics.librato.com/s/spaces/" librato-space-id] )
         slack-message   {
           :title      (str alert-name " has fired!")
           :title_link (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
