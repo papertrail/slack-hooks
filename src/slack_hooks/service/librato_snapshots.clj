@@ -45,7 +45,7 @@
 
 (def librato-request-options 
   {
-    :basic-auth [librato-api-user librato-api-token]; "767ba449fa0ef4d508ca698d3f452db1f52b22e97d26c50798b0021e48d54c0e"]
+    :basic-auth [librato-api-user librato-api-token]
     :content-type :json
     :accept :json
     :throw-entire-message? true
@@ -147,7 +147,11 @@
     (if (nil? condition) nil
       (if
         (= condition_violated (:id (first condition)))
-         (format "%s %s for %s seconds" (:type (first condition)) (:threshold (first condition)) (:duration (first condition)))
+         (str 
+           (:type (first condition)) " " 
+           (:threshold (first condition)) 
+           (if (nil? (:duration (first condition))) "" 
+               (str "for " (:duration (first condition)) "seconds")))
          (recur (next condition))
         )
       )
@@ -193,7 +197,7 @@
           :title      (str alert-name " has fired!")
           :title_link (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
           :image_url  snapshot
-          :text       (str/join "\n" [(str text_1) (str "<" space-link "|Alerting Chart>")])
+          :text       (str/join "\n" [(str text_1) (str "<" space-link "|View Sources>")])
           :fallback   (str alert-name "has fired!")
         }
         ]
