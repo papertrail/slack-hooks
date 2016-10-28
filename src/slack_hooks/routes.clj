@@ -12,21 +12,22 @@
             [slack-hooks.service.pagerduty  :as service.pagerduty]
             [slack-hooks.service.sentry     :as service.sentry]
             [slack-hooks.service.scout      :as service.scout]))
-
+            [slack-hooks.service.librato-snapshots :as service.librato-snapshots]
 (defn four-oh-four [request]
   (-> (response "Page not found")
       (status 404)))
 
 (def routes-by-uri
-  {"/github"     service.github/github
-   "/mandrill"   service.mandrill/mandrill
-   "/opsgenie"   service.opsgenie/opsgenie
-   "/papertrail" service.papertrail/papertrail
-   "/tender"     service.tender/tender
-   "/travis"     service.travis/travis
-   "/pagerduty"  service.pagerduty/pagerduty
-   "/sentry"     service.sentry/sentry
-   "/scout"      service.scout/scout})
+  {"/github"            service.github/github
+   "/mandrill"          service.mandrill/mandrill
+   "/opsgenie"          service.opsgenie/opsgenie
+   "/papertrail"        service.papertrail/papertrail
+   "/tender"            service.tender/tender
+   "/travis"            service.travis/travis
+   "/pagerduty"         service.pagerduty/pagerduty
+   "/sentry"            service.sentry/sentry
+   "/scout"             service.scout/scout
+   "/librato-snapshots" service.librato-snapshots/librato})
 
 (defn handler [request]
   (if (= :head (:request-method request))
