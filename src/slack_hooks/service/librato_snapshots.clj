@@ -56,7 +56,7 @@
   Returns nil if it can't get the URL."
    [poll-url times]
   (let [
-       request (client/get (librato-api-url poll-url) librato-request-options)
+       request (client/get poll-url librato-request-options)
        image (get (json/read-str (:body request)) "image_href")
        ]
        (if (> times 5) 
