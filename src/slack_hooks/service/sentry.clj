@@ -28,6 +28,13 @@
   ([string length]
    (truncate-string string length "...")))
 
+(defn slack-escape
+  [input]
+  (string/escape input
+                 {\< "&lt;"
+                  \> "&gt;"
+                  \& "&amp;"}))
+
 (defn source-with-line-numbers
   [center-line-number pre-lines center-line post-lines]
   (let [pre-line-count     (count pre-lines)
@@ -42,31 +49,55 @@
         pre-lines-with-nums (map #(format format-string "" %1 %2) pre-line-nums pre-lines)
         post-lines-with-nums (map #(format format-string "" %1 %2) post-line-nums post-lines)
         center-line-with-num (format format-string ">" center-line-number center-line)]
-    (string/join "" (flatten [pre-lines-with-nums center-line-with-num post-lines-with-nums]))))
+    (string/join "\n"
+                 (map string/trim-newline
+                      (flatten [pre-lines-with-nums center-line-with-num post-lines-with-nums])))))
+
+(defn frame-has-source?
+  ([frame]
+   (every? frame [:pre_context :context_line :post_context])))
+
+(defn frame->location
+  ([{:keys [filename lineno function]}]
+   (cond (and filename lineno function)
+         (format "%s:%d: in `%s'" filename lineno function)
+         (and filename lineno)
+         (format "%s:%d" filename lineno))))
+
+(defn frame->source
+  ([frame]
+   (apply source-with-line-numbers
+          (map frame [:lineno :pre_context :context_line :post_context]))))
+
+(defn frame->description
+  ([frame]
+   (if (frame-has-source? frame)
+     (format "%s:\n```%s```" (frame->location frame) (frame->source frame))
+     (frame->location frame))))
 
 (defn sentry->slack [message]
-  (let [project                 (:project message)
-        project-name            (:project_name message)
-        exception-url           (:url message)
-        exception               (-> message :event :sentry.interfaces.Exception :values first)
-        important-frame         (last (filter :in_app (-> exception :stacktrace :frames)))]
-    (if (and exception important-frame)
+  (let [project         (:project message)
+        project-name    (:project_name message)
+        exception-url   (:url message)
+        exception       (-> message :event :sentry.interfaces.Exception :values first)
+        important-frame (last (filter :in_app (-> exception :stacktrace :frames)))]
+    (if exception
       (let [exception-class         (:type exception)
             exception-message       (:value exception)
-            exception-short-message (truncate-string (first (string/split-lines (str exception-message))) 100)
-
-            important-source            (string/join (flatten (map important-frame [:pre_context :context_line :post_context])))
-            important-source-with-lines (apply source-with-line-numbers (map important-frame [:lineno :pre_context :context_line :post_context]))
-            important-line              (apply format "%s:%d: in `%s':" (map important-frame [:filename :lineno :function]))]
-        {:title              (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
-                                     exception-class exception-short-message)
-         :description        (format "%s\n```%s```" important-line important-source-with-lines)
-         :simple-description important-line
-         }))))
+            exception-short-message (truncate-string (first (string/split-lines (str exception-message))) 100)]
+        (if important-frame
+          (let [important-line (frame->location important-frame)]
+            {:title              (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
+                                         exception-class (slack-escape exception-short-message))
+             :description        (frame->description important-frame)
+             :simple-description important-line
+             })
+          {:title (format "*%s: %s: <%s|%s: %s>*" project project-name exception-url
+                          exception-class (slack-escape exception-short-message))})))))
 
 (defn sentry [request]
-  (let [data (sentry->slack (:body request))]
-    ; (prn (-> request :params :payload))
+  (prn "sentry:" (:body request))
+  (if-let [data (sentry->slack (:body request))]
     (slack/notify {:slack-url   (or (-> request :params :slack_url) sentry-slack-url)
                    :username    sentry-username
                    :icon_url    sentry-avatar

@@ -10,5 +10,5 @@
           data (sentry/sentry->slack json)]
       (is (= "*project: projectname: <https://beta.getsentry.com/project/project/group/123/|ZeroDivisionError: divided by 0>*"
              (:title data)))
-      (is (= "bin/raven:36: in `<main>':\n```  33     if !dsn\n  34       puts \"Usage: raven test <dsn>\"\n  35     else\n> 36       Raven::CLI::test(dsn)\n  37     end\n  38   else\n  39     puts parser\n```"
+      (is (= "bin/raven:36: in `<main>':\n```  33     if !dsn\n  34       puts \"Usage: raven test <dsn>\"\n  35     else\n> 36       Raven::CLI::test(dsn)\n  37     end\n  38   else\n  39     puts parser```"
              (:description data))))))
