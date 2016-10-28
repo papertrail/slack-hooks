@@ -79,7 +79,7 @@
                         :duration chart-duration
                       }
                     }
-          request (client/post (librato-api-url "metrics-api/v1/snapshots") (merge librato-request-options {:body (json/write-str form-data)}))
+          request (client/post (librato-api-url "/metrics-api/v1/snapshots") (merge librato-request-options {:body (json/write-str form-data)}))
           ]
           ; Poll this for image_href
           (get (:headers request) "location")
