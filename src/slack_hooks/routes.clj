@@ -11,8 +11,8 @@
             [slack-hooks.service.travis     :as service.travis]
             [slack-hooks.service.pagerduty  :as service.pagerduty]
             [slack-hooks.service.sentry     :as service.sentry]
-            [slack-hooks.service.scout      :as service.scout]))
-            [slack-hooks.service.librato-snapshots :as service.librato-snapshots]
+            [slack-hooks.service.scout      :as service.scout]
+            [slack-hooks.service.librato-snapshots :as service.librato-snapshots]))
 (defn four-oh-four [request]
   (-> (response "Page not found")
       (status 404)))

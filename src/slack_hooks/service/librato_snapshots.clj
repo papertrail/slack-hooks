@@ -175,13 +175,6 @@
                           )) violations)))
   )
 
-(let [alert-name      (:name (:alert data))
-      violations      (:violations data)
-      chart-snapshot (snapshot-chart (create-chart alert-name (get-metrics violations)) chart-duration )
-      ]
-    (snapshot-image chart-snapshot 1 )
-  )
-
 (defn librato [request]
   "Receives the Librato Webhook. Sends a slack message."
   (let [payload         (-> request :params :payload)
