@@ -32,7 +32,7 @@
 
 (def chart-duration
   (or
-    (System/getenv "LIBRATO_CHART_DURATION") 
+    (System/getenv "LIBRATO_CHART_DURATION")
     "3600"))
 
 (def librato-space-id
@@ -43,7 +43,7 @@
     (str/join ["https://metrics-api.librato.com" path])
   )
 
-(def librato-request-options 
+(def librato-request-options
   {
     :basic-auth [librato-api-user librato-api-token]
     :content-type :json
@@ -59,9 +59,9 @@
        request (client/get poll-url librato-request-options)
        image (get (json/read-str (:body request)) "image_href")
        ]
-       (if (> times 5) 
-         nil 
-         (if (not (nil? image)) 
+       (if (> times 5)
+         nil
+         (if (not (nil? image))
            image
            (or (Thread/sleep 2000) (snapshot-image poll-url (+ times 1))
           )))
@@ -73,7 +73,7 @@
    [chart-id chart-duration]
     (let [
           form-data {
-                     :subject 
+                     :subject
                       {
                         :chart {:id chart-id, :source nil, :type "line"}
                         :duration chart-duration
@@ -99,7 +99,7 @@
      (last (str/split (get (:headers request) "location") #"/"))
   )
 )
-(defn update-chart 
+(defn update-chart
   "Updates the chart in Librato. Returns the chart ID."
   [chart-id chart-data]
    (let [ form-data {
@@ -113,17 +113,17 @@
   )
 )
 
-(defn chart-exists? 
+(defn chart-exists?
   "Returns the Chart ID if a chart exists. nil otherwise"
   [chart-name]
   (let [
         request (client/get (format (librato-api-url  "/v1/spaces/%s/charts") librato-space-id ) librato-request-options)
         ]
-      (loop [charts (json/read-str (:body request))] 
+      (loop [charts (json/read-str (:body request))]
         (if (nil? charts) nil
-          (if 
-            (= chart-name (get (first charts) "name")) 
-            (get (first charts) "id") 
+          (if
+            (= chart-name (get (first charts) "name"))
+            (get (first charts) "id")
             (recur (next charts))
           )
         )
@@ -140,7 +140,7 @@
   "Gets the metrics from the violations."
   (distinct (flatten (map (fn [s]
             (let [source (first s)]
-              (map (fn [m] {:metric (:metric m), :source source}  )  (first (rest s))) 
+              (map (fn [m] {:metric (:metric m), :source source}  )  (first (rest s)))
             )
             ) metrics)))
   )
@@ -150,10 +150,10 @@
     (if (nil? condition) nil
       (if
         (= condition_violated (:id (first condition)))
-         (str 
-           (:type (first condition)) " " 
-           (:threshold (first condition)) 
-           (if (nil? (:duration (first condition))) "" 
+         (str
+           (:type (first condition)) " "
+           (:threshold (first condition))
+           (if (nil? (:duration (first condition))) ""
                (str "for " (:duration (first condition)) "seconds")))
          (recur (next condition))
         )
@@ -162,13 +162,13 @@
   )
 
 (defn metric-message [conditions violations]
-  
+
   (let [
-        metric-condition (distinct (flatten (map 
-                       (fn [s] 
-                            (map 
+        metric-condition (distinct (flatten (map
+                       (fn [s]
+                            (map
                               (fn [m] (format "`%s` went %s" (:metric m) (thresholds-for-metric conditions (:condition_violated m)))  )
-                              (first (rest s))) 
+                              (first (rest s)))
             ) violations)))
         ]
     metric-condition
