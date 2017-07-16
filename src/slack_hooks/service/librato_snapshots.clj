@@ -130,7 +130,10 @@
        )
       )
    )
-
+(defn delete-chart
+  "Deletes a chart when no longer needed"
+  [chart-name]
+  )
 
 (defn get-metrics
   [metrics]
@@ -172,12 +175,12 @@
     )
   )
 
-(defn offending-sources [violations]
-  (distinct (flatten (map (fn [s]
-                          (let [source (first s)]
-                            (map (fn [m] (format "- %s, reaching %s" (name source) (:value m)) )  (first (rest s)))
-                          )) violations)))
-  )
+; (defn offending-sources [violations]
+;   (distinct (flatten (map (fn [s]
+;                           (let [source (first s)]
+;                             (map (fn [m] (format "- %s, reaching %s" (name source) (:value m)) )  (first (rest s)))
+;                           )) violations)))
+;   )
 
 (defn librato [request]
   "Receives the Librato Webhook. Sends a slack message."
@@ -191,14 +194,14 @@
         chart           (if (not (nil? chart-id)) (update-chart chart-id metrics) (create-chart alert-name metrics))
         snapshot        (snapshot-image (snapshot-chart chart chart-duration) 1)
         text_1          (first (metric-message conditions violations))
-        sources         (offending-sources violations)
+        ; sources         (offending-sources violations)
         space-link      (str/join ["https://metrics.librato.com/s/spaces/" librato-space-id] )
         slack-message   {
           :title      (str alert-name " has fired!")
           :title_link (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
           :image_url  snapshot
           :text       (str/join "\n" [(str text_1) (str "<" space-link "|View Sources>")])
-          :fallback   (str alert-name "has fired!")
+          :fallback   (str alert-name " has fired!")
         }
         ]
 
