@@ -113,6 +113,12 @@
   )
 )
 
+(defn clear-chart
+  "Removes all metrics from a chart"
+  [chart-id]
+  (update-chart chart-id [])
+  )
+
 (defn chart-exists?
   "Returns the Chart ID if a chart exists. nil otherwise"
   [chart-name]
@@ -130,10 +136,6 @@
        )
       )
    )
-(defn delete-chart
-  "Deletes a chart when no longer needed"
-  [chart-name]
-  )
 
 (defn get-metrics
   [metrics]
@@ -182,11 +184,10 @@
 ;                           )) violations)))
 ;   )
 
-(defn librato [request]
-  "Receives the Librato Webhook. Sends a slack message."
-  (let [payload         (-> request :params :payload)
-        data            (json/read-str payload :key-fn keyword)
-        alert-name      (:name (:alert data))
+(defn slack-message
+  "Creates the Slack message to send"
+  [data]
+  (let [alert-name      (:name (:alert data))
         conditions      (:conditions data)
         violations      (:violations data)
         metrics         (get-metrics violations)
@@ -204,13 +205,37 @@
           :fallback   (str alert-name " has fired!")
         }
         ]
+        { :slack-url   librato-slack-url
+          :username    librato-username
+          :icon_url    librato-avatar
+          :attachments [slack-message]
+        }
+       )
+  )
 
-      (slack/notify {:slack-url   librato-slack-url
-                     :username    librato-username
-                     :icon_url    librato-avatar
-                     :attachments [slack-message]
-                   }
+(defn alert-clear
+  "Clears the alerting chart"
+  [data]
+  (let [alert-name      (:name (:alert data))
+        chart-id        (chart-exists? alert-name)
+        ]
+    (if (not (nil? chart-id)) (clear-chart alert-name) nil)
+    )
+  )
+  
 
-        )
+(defn post-message
+  "Posts the snapshot to Slack"
+  [message]
+  (slack/notify message)
+  )
+
+
+(defn librato [request]
+  "Receives the Librato Webhook. Sends a slack message."
+  (let [payload         (-> request :params :payload)
+        data            (json/read-str payload :key-fn keyword)
+        ]
+      (if (:clear data) (alert-clear) (post-message (slack-message data)) )
     )
   )
