@@ -194,15 +194,17 @@
         chart-id        (chart-exists? alert-name)
         chart           (if (not (nil? chart-id)) (update-chart chart-id metrics) (create-chart alert-name metrics))
         snapshot        (snapshot-image (snapshot-chart chart chart-duration) 1)
-        text_1          (first (metric-message conditions violations))
+        ;text_1          (first (metric-message conditions violations))
         ; sources         (offending-sources violations)
-        space-link      (str/join ["https://metrics.librato.com/s/spaces/" librato-space-id] )
+        space-link      (str "https://metrics.librato.com/s/spaces/" librato-space-id)
+        chart-link      (str space-link "/explore/" (chart-exists? alert-name)) ; Re-evaluate chart-exists? because it could've been missing previously
+        alert-link      (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
         slack-message   {
-          :title      (str alert-name " has fired!")
-          :title_link (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
+          :title      (str "Here's the chart for " alert-name)
+          :title_link space-link
           :image_url  snapshot
-          :text       (str/join "\n" [(str text_1) (str "<" space-link "|View Sources>")])
-          :fallback   (str alert-name " has fired!")
+          :text       (str/join "\n" [(str "<" chart-link "|See alerting metrics>") (str "<" alert-link "|Go to alert definition>") ] )
+          :fallback   (str alert-name " has triggered!")
         }
         ]
         { :slack-url   librato-slack-url
@@ -219,7 +221,7 @@
   (let [alert-name      (:name (:alert data))
         chart-id        (chart-exists? alert-name)
         ]
-    (if (not (nil? chart-id)) (clear-chart alert-name) nil)
+    (if (not (nil? chart-id)) (clear-chart chart-id) nil)
     )
   )
   
