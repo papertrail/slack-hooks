@@ -188,6 +188,7 @@
   "Creates the Slack message to send"
   [data]
   (let [alert-name      (:name (:alert data))
+        alert-id        (:id (:alert data))
         conditions      (:conditions data)
         violations      (:violations data)
         metrics         (get-metrics violations)
@@ -198,7 +199,7 @@
         ; sources         (offending-sources violations)
         space-link      (str "https://metrics.librato.com/s/spaces/" librato-space-id)
         chart-link      (str space-link "/explore/" (chart-exists? alert-name)) ; Re-evaluate chart-exists? because it could've been missing previously
-        alert-link      (str "https://metrics.librato.com/alerts#" (:id (:alert data)))
+        alert-link      (str "https://metrics.librato.com/alerts#" alert-id)
         slack-message   {
           :title      (str "Here's the chart for " alert-name)
           :title_link space-link
