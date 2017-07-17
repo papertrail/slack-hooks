@@ -236,6 +236,6 @@
   (let [payload         (-> request :params :payload)
         data            (json/read-str payload :key-fn keyword)
         ]
-      (if (:clear data) (alert-clear) (post-message (slack-message data)) )
+      (if (:clear data) (alert-clear data) (post-message (slack-message data)) )
     )
   )
