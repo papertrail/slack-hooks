@@ -1,0 +1,32 @@
+{
+    "alert": {
+        "id": 12345,
+        "name": "the-test-alert",
+        "runbook_url": "",
+        "version": 2,
+        "description": "This is a test alert"
+    },
+    "account": "super-cool-email",
+    "trigger_time": 1500305041,
+    "conditions": [
+        {
+            "id": 1150670,
+            "type": "above",
+            "threshold": 2,
+            "duration": 300
+        }
+    ],
+    "violations": {
+        "example-ubuntu-14.04": [
+            {
+                "metric": "collectd.load.load.shortterm",
+                "value": 7.190000057220459,
+                "recorded_at": 1444177454,
+                "condition_violated": 1150670,
+                "count": 31,
+                "begin": 1444177140,
+                "end": 1444177440
+            }
+        ]
+    }
+}
